@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <title>Walter Van Beiredonck - MoMA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">MoMA</div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-image-container">
+      <!-- Base layer: Walter portrait -->
+      <img src="/photos/water-intro.jpg" alt="Walter Van Beirendonck" class="hero-image-base" id="heroImageBase">
+
+      <!-- Jester image layer (revealed through rectangle) -->
+      <div class="jester-image-wrapper" id="jesterImageWrapper">
+        <img src="/photos/walter-intro-jester.jpg" alt="Jester" class="jester-image" id="jesterImage">
+      </div>
+
+      <!-- Draggable reveal rectangle -->
+      <div class="reveal-rectangle" id="revealRectangle">
+        <div class="rectangle-handle"></div>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="hero-title glitch" data-text="WALTER VAN BEIREDONCK">WALTER VAN BEIREDONCK</h1>
+        <p class="hero-subtitle">THE SHAMAN & THE JESTER</p>
+        <p class="hero-subtitle">ARCHIVE UNLOCKED</p>
+        <button class="cta-button">ENTER THE RESISTANCE</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Section -->
+  <section class="content-section">
+    <h2 class="section-title">INTRO - NEW SPECIES</h2>
+    <div class="two-column">
+      <div class="column-text">
+        <p>In the realm of avant-garde fashion, few designers have pushed boundaries as relentlessly as Walter
+          Van Beiredonck. His work transcends traditional fashion, creating a universe where technology, art,
+          and rebellion converge. This exhibition explores the evolution of his radical vision, from the early
+          days of techno-shamanism to his current explorations of digital resistance and human-machine
+          relationships.</p>
+        <p>Van Beiredonck's designs are not merely clothing—they are statements, provocations, and portals into
+          alternative realities. Each collection tells a story of resistance against conformity, challenging
+          viewers to question the status quo and embrace the unknown.</p>
+      </div>
+      <div class="column-image">
+        <div class="image-placeholder"></div>
+      </div>
+    </div>
+    <div class="full-width-image">
+      <div class="image-placeholder"></div>
+    </div>
+  </section>
+
+  <!-- The Techno-Shaman Section -->
+  <section class="content-section">
+    <h2 class="section-title">THE TECHNO-SHAMAN</h2>
+    <p class="section-subtitle">[1985] The Birth of Walter V. United Trust</p>
+    <div class="two-column">
+      <div class="column-text">
+        <p>The Techno-Shaman collection marked Van Beiredonck's emergence as a force in fashion. Drawing
+          inspiration from shamanic rituals and emerging technology, he created garments that blurred the line
+          between the spiritual and the digital. This period saw the birth of his signature aesthetic: bold
+          colors, geometric patterns, and a fusion of organic and synthetic materials.</p>
+        <p>Through this collection, Van Beiredonck established himself as a visionary who saw fashion as a
+          medium for transformation—both personal and societal. The Techno-Shaman was not just a designer but
+          a guide, leading wearers into new dimensions of self-expression.</p>
+      </div>
+      <div class="column-image">
+        <div class="image-placeholder"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aestheticterrorists Section -->
+  <section class="content-section">
+    <h2 class="section-title">AESTHETICTERRORISTS</h2>
+    <p class="section-subtitle">2001-2002 | Rebellion Through Surrealism</p>
+    <div class="two-column">
+      <div class="column-text">
+        <p>The Aestheticterrorists collection represents a peak in Van Beiredonck's exploration of surrealism
+          and political commentary. Created during a period of global uncertainty, these designs served as
+          both armor and weapon—protecting the wearer while challenging the viewer.</p>
+        <p>This collection featured distorted silhouettes, unexpected material combinations, and imagery that
+          defied conventional beauty standards. Each piece was a manifesto, declaring independence from
+          mainstream fashion and embracing the power of the unconventional.</p>
+      </div>
+      <div class="column-image">
+        <div class="image-placeholder"></div>
+      </div>
+    </div>
+    <div class="button-center">
+      <button class="gta-button">GTA</button>
+    </div>
+  </section>
+
+  <!-- The Court Jester Hero Section -->
+  <section class="hero-section-court-jester">
+    <div class="court-jester-bg">
+      <h2 class="court-jester-title glitch" data-text="THE COURT JESTER">THE COURT JESTER</h2>
+    </div>
+  </section>
+
+  <!-- Rebellion Through Truth Section -->
+  <section class="content-section">
+    <h2 class="section-title">Rebellion Through Truth</h2>
+    <p class="section-subtitle">2010 - PROTEST</p>
+    <div class="two-column reverse">
+      <div class="column-image">
+        <div class="image-placeholder"></div>
+      </div>
+      <div class="column-text">
+        <p>In 2010, Van Beiredonck turned his focus to protest and activism, using fashion as a platform for
+          truth-telling. This collection featured bold graphics, political slogans, and designs that directly
+          engaged with contemporary social issues.</p>
+        <p>The garments became canvases for dissent, each piece carrying messages of resistance, hope, and the
+          urgent need for change. This period marked a shift toward more explicitly political work, while
+          maintaining the designer's signature aesthetic of boldness and innovation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dawleetoo Section -->
+  <section class="content-section">
+    <h2 class="section-title centered">DAWLEETOO</h2>
+    <p class="section-subtitle centered">The Human vs. The Machine</p>
+    <div class="two-column reverse">
+      <div class="column-image">
+        <div class="image-placeholder"></div>
+      </div>
+      <div class="column-text">
+        <p>Dawleetoo explores the tension between humanity and technology, questioning what it means to be human
+          in an increasingly digital world. Van Beiredonck's designs in this collection feature mechanical
+          elements, digital patterns, and organic forms in constant dialogue.</p>
+        <p>This work reflects on the cyborg condition—the merging of flesh and machine, the blurring of
+          boundaries between natural and artificial. Each piece asks: where does the human end and the machine
+          begin? And perhaps more importantly, should there be a boundary at all?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action / Footer Area -->
+  <section class="cta-section">
+    <div class="cta-text-large">
+      <p>Its the dawn of a new era.</p>
+      <p>Come and explore the</p>
+      <p>history at Momu museum</p>
+    </div>
+    <div class="cta-text-secondary">WALTER-FY YOUR VOICE</div>
+    <div class="two-column">
+      <div class="column-image">
+        <div class="image-placeholder"></div>
+      </div>
+      <div class="column-text">
+        <p>Join us in celebrating the radical vision of Walter Van Beiredonck. This exhibition is more than a
+          retrospective—it's an invitation to resist, to question, and to imagine new possibilities. Each
+          piece tells a story of rebellion, innovation, and the unyielding power of creative expression.</p>
+        <p>Experience the evolution of a designer who has never compromised, who has always pushed forward, and
+          who continues to challenge our understanding of what fashion can be.</p>
+      </div>
+    </div>
+    <div class="final-instruction">
+      <p class="glitch" data-text="OBSERVATION: ACTIVATE CURSOR - START THE RESISTANCE!">OBSERVATION: ACTIVATE
+        CURSOR - START THE RESISTANCE!</p>
+    </div>
+  </section>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
