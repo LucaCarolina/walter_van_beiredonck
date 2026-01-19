@@ -22,7 +22,7 @@
 
 body {
     font-family: 'Space Mono', monospace;
-    background-color: var(--color-white);
+    background-color: #F7F5E9;
     color: var(--color-black);
     line-height: 1.6;
     overflow-x: hidden;
@@ -34,7 +34,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: var(--color-cream);
+    background-color: #F7F5E9;
     /* Changed to Cream */
     z-index: 1000;
     padding: 16px 40px;
@@ -527,6 +527,128 @@ body {
     padding: 80px 40px;
 }
 
+/* Intro Clapperboard Section */
+.intro-clapper {
+    --clapper-open: 0;
+    --clapper-text: 0;
+    --highlight-progress: 0;
+    --intro-image-scale: 0.8;
+    --intro-image-opacity: 0;
+    background-color: #F7F5E9;
+    min-height: 100vh;
+    padding: 80px 40px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.intro-clapper-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+}
+
+.intro-clapperboard {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+}
+
+.clapper-top {
+    position: absolute;
+    left: 0;
+    top: -50px;
+    width: 100%;
+    height: 70px;
+    background: repeating-linear-gradient(
+        -45deg,
+        var(--color-black) 0,
+        var(--color-black) 14px,
+        var(--color-white) 14px,
+        var(--color-white) 28px
+    );
+    border: 2px solid var(--color-black);
+    transform-origin: left bottom;
+    transform: rotate(calc(var(--clapper-open) * -10deg));
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.clapper-title {
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    letter-spacing: 2px;
+    color: var(--color-white);
+    text-transform: uppercase;
+    -webkit-text-stroke: 2px var(--color-black);
+    text-stroke: 2px var(--color-black);
+}
+
+.clapper-bottom {
+    border: 2px solid var(--color-black);
+    background-color: var(--color-white);
+    padding: 50px 46px 46px;
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.clapper-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--color-black);
+    opacity: var(--clapper-text);
+    transform: translateY(calc((1 - var(--clapper-text)) * 18px))
+        skewX(calc((1 - var(--clapper-text)) * -4deg))
+        rotate(calc((1 - var(--clapper-text)) * -1deg));
+    filter: blur(calc((1 - var(--clapper-text)) * 4px))
+        saturate(calc(1 + (var(--clapper-text) * 0.4)));
+    text-shadow:
+        calc((1 - var(--clapper-text)) * -6px) 0 rgba(0, 255, 255, 0.6),
+        calc((1 - var(--clapper-text)) * 6px) 0 rgba(255, 0, 255, 0.5);
+}
+
+.clapper-text p + p {
+    margin-top: 22px;
+}
+
+.highlight-sentence {
+    display: inline;
+    background-image: linear-gradient(var(--color-red), var(--color-red));
+    background-repeat: no-repeat;
+    background-size: calc(var(--highlight-progress) * 100%) 100%;
+    color: var(--color-white);
+    padding: 2px 4px;
+}
+
+.intro-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+    margin-top: -310px;
+}
+
+.intro-image-img {
+    width: 100%;
+    max-width: 1250px;
+    max-height: calc(100vh + 1vh);
+    height: auto;
+    transform: scale(var(--intro-image-scale));
+    transform-origin: top center;
+    opacity: var(--intro-image-opacity);
+    transition: transform 120ms linear, opacity 120ms linear;
+    filter: none;
+    will-change: transform, opacity;
+}
+
 .section-title {
     font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
     font-size: clamp(2rem, 5vw, 4rem);
@@ -833,6 +955,29 @@ body::before {
         padding: 60px 20px;
     }
 
+    .intro-clapper {
+        padding: 70px 20px;
+    }
+
+    .intro-clapper-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .clapper-top {
+        height: 60px;
+        top: -60px;
+        padding: 0 20px;
+    }
+
+    .clapper-bottom {
+        padding: 36px 28px;
+    }
+
+    .intro-image-img {
+        max-width: 520px;
+    }
+
     .hero-image-container {
         height: 60vh;
         min-height: 400px;
@@ -866,5 +1011,13 @@ body::before {
 
     .content-section {
         padding: 40px 15px;
+    }
+
+    .intro-clapper {
+        padding: 60px 15px;
+    }
+
+    .clapper-title {
+        font-size: 1.4rem;
     }
 }
