@@ -5,17 +5,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <title>Walter Van Beiredonck - MoMA</title>
+  <title>Walter Van Beirendonck - MoMA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
   <!-- Header -->
   <header class="header">
     <div class="header-content">
-      <div class="logo">MoMA</div>
+      <div class="logo">
+        <img src="/photos/MoMu_News_MoMuLogo.png" alt="MoMu" class="logo-image">
+      </div>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
         <span></span>
         <span></span>
@@ -37,13 +39,24 @@
 
       <!-- Draggable reveal rectangle -->
       <div class="reveal-rectangle" id="revealRectangle">
-        <div class="rectangle-handle"></div>
+        <div class="corner-circle tl"></div>
+        <div class="corner-circle tr"></div>
+        <div class="corner-circle bl"></div>
+        <div class="corner-circle br"></div>
+
+        <!-- Infinite Grid Lines extending from the rectangle borders -->
+        <div class="grid-extension top"></div>
+        <div class="grid-extension bottom"></div>
+        <div class="grid-extension left"></div>
+        <div class="grid-extension right"></div>
       </div>
 
       <div class="hero-content">
-        <h1 class="hero-title glitch" data-text="WALTER VAN BEIREDONCK">WALTER VAN BEIREDONCK</h1>
-        <p class="hero-subtitle">THE SHAMAN & THE JESTER</p>
-        <p class="hero-subtitle">ARCHIVE UNLOCKED</p>
+        <div class="hero-text-block">
+          <h1 class="hero-title glitch" data-text="WALTER VAN BEIRENDONCK">WALTER VAN BEIRENDONCK</h1>
+          <p class="hero-subtitle">THE SHAMAN & THE JESTER</p>
+          <p class="hero-subtitle">ARCHIVE UNLOCKED</p>
+        </div>
         <button class="cta-button">ENTER THE RESISTANCE</button>
       </div>
     </div>
@@ -55,11 +68,11 @@
     <div class="two-column">
       <div class="column-text">
         <p>In the realm of avant-garde fashion, few designers have pushed boundaries as relentlessly as Walter
-          Van Beiredonck. His work transcends traditional fashion, creating a universe where technology, art,
+          Van Beirendonck. His work transcends traditional fashion, creating a universe where technology, art,
           and rebellion converge. This exhibition explores the evolution of his radical vision, from the early
           days of techno-shamanism to his current explorations of digital resistance and human-machine
           relationships.</p>
-        <p>Van Beiredonck's designs are not merely clothing—they are statements, provocations, and portals into
+        <p>Van Beirendonck's designs are not merely clothing—they are statements, provocations, and portals into
           alternative realities. Each collection tells a story of resistance against conformity, challenging
           viewers to question the status quo and embrace the unknown.</p>
       </div>
@@ -78,11 +91,11 @@
     <p class="section-subtitle">[1985] The Birth of Walter V. United Trust</p>
     <div class="two-column">
       <div class="column-text">
-        <p>The Techno-Shaman collection marked Van Beiredonck's emergence as a force in fashion. Drawing
+        <p>The Techno-Shaman collection marked Van Beirendonck's emergence as a force in fashion. Drawing
           inspiration from shamanic rituals and emerging technology, he created garments that blurred the line
           between the spiritual and the digital. This period saw the birth of his signature aesthetic: bold
           colors, geometric patterns, and a fusion of organic and synthetic materials.</p>
-        <p>Through this collection, Van Beiredonck established himself as a visionary who saw fashion as a
+        <p>Through this collection, Van Beirendonck established himself as a visionary who saw fashion as a
           medium for transformation—both personal and societal. The Techno-Shaman was not just a designer but
           a guide, leading wearers into new dimensions of self-expression.</p>
       </div>
@@ -98,7 +111,7 @@
     <p class="section-subtitle">2001-2002 | Rebellion Through Surrealism</p>
     <div class="two-column">
       <div class="column-text">
-        <p>The Aestheticterrorists collection represents a peak in Van Beiredonck's exploration of surrealism
+        <p>The Aestheticterrorists collection represents a peak in Van Beirendonck's exploration of surrealism
           and political commentary. Created during a period of global uncertainty, these designs served as
           both armor and weapon—protecting the wearer while challenging the viewer.</p>
         <p>This collection featured distorted silhouettes, unexpected material combinations, and imagery that
@@ -130,7 +143,7 @@
         <div class="image-placeholder"></div>
       </div>
       <div class="column-text">
-        <p>In 2010, Van Beiredonck turned his focus to protest and activism, using fashion as a platform for
+        <p>In 2010, Van Beirendonck turned his focus to protest and activism, using fashion as a platform for
           truth-telling. This collection featured bold graphics, political slogans, and designs that directly
           engaged with contemporary social issues.</p>
         <p>The garments became canvases for dissent, each piece carrying messages of resistance, hope, and the
@@ -150,7 +163,7 @@
       </div>
       <div class="column-text">
         <p>Dawleetoo explores the tension between humanity and technology, questioning what it means to be human
-          in an increasingly digital world. Van Beiredonck's designs in this collection feature mechanical
+          in an increasingly digital world. Van Beirendonck's designs in this collection feature mechanical
           elements, digital patterns, and organic forms in constant dialogue.</p>
         <p>This work reflects on the cyborg condition—the merging of flesh and machine, the blurring of
           boundaries between natural and artificial. Each piece asks: where does the human end and the machine
@@ -172,7 +185,7 @@
         <div class="image-placeholder"></div>
       </div>
       <div class="column-text">
-        <p>Join us in celebrating the radical vision of Walter Van Beiredonck. This exhibition is more than a
+        <p>Join us in celebrating the radical vision of Walter Van Beirendonck. This exhibition is more than a
           retrospective—it's an invitation to resist, to question, and to imagine new possibilities. Each
           piece tells a story of rebellion, innovation, and the unyielding power of creative expression.</p>
         <p>Experience the evolution of a designer who has never compromised, who has always pushed forward, and

@@ -10,11 +10,10 @@ export function initHeroDrag() {
     }
 
     const $rectangle = $('#revealRectangle');
-    const $jesterWrapper = $('#jesterImageWrapper');
-    const $walterImage = $('.hero-image-base');
+    const $jesterImage = $('.jester-image'); 
     const $container = $('.hero-image-container');
     
-    if (!$rectangle.length || !$jesterWrapper.length || !$container.length) {
+    if (!$rectangle.length || !$jesterImage.length || !$container.length) {
         return;
     }
 
@@ -23,129 +22,112 @@ export function initHeroDrag() {
     let startY = 0;
     let initialLeft = 0;
     let initialTop = 0;
-    let containerRect = null;
-
-    // Get initial position from CSS or set default
-    function getRectanglePosition() {
-        const rect = $rectangle[0].getBoundingClientRect();
-        const containerRect = $container[0].getBoundingClientRect();
-        return {
-            left: rect.left - containerRect.left,
-            top: rect.top - containerRect.top
-        };
-    }
-
-    // Update clip-path on Walter image to exclude rectangle area, revealing jester
+    
+    // Bounds for constraining the drag
+    let dragBounds = {
+        minLeft: 0,
+        maxLeft: 0,
+        minTop: 0,
+        maxTop: 0
+    };
+    
+    // Update clip-path on Jester image to MATCH rectangle area
+    // The calculation must be relative to the IMAGE, not the container
     function updateClipPath() {
         const rect = $rectangle[0].getBoundingClientRect();
-        const containerRect = $container[0].getBoundingClientRect();
+        const imgRect = $jesterImage[0].getBoundingClientRect();
         
-        const left = rect.left - containerRect.left;
-        const top = rect.top - containerRect.top;
-        const right = left + rect.width;
-        const bottom = top + rect.height;
+        // Calculate the rectangle's position relative to the image
+        const top = rect.top - imgRect.top;
+        const left = rect.left - imgRect.left;
+        const right = imgRect.width - (left + rect.width);
+        const bottom = imgRect.height - (top + rect.height);
         
-        // Convert to percentage for clip-path
-        const containerWidth = containerRect.width;
-        const containerHeight = containerRect.height;
+        const clipValue = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
         
-        const leftPercent = Math.max(0, Math.min(100, (left / containerWidth) * 100));
-        const topPercent = Math.max(0, Math.min(100, (top / containerHeight) * 100));
-        const rightPercent = Math.max(0, Math.min(100, (right / containerWidth) * 100));
-        const bottomPercent = Math.max(0, Math.min(100, (bottom / containerHeight) * 100));
-        
-        // Create a clip-path that excludes the rectangle area
-        // We'll create a polygon that goes around the rectangle
-        // Top area: 0,0 to 100,0, but skip the rectangle
-        // Left area: 0,0 to 0,100, but skip the rectangle
-        // Right area: 100,0 to 100,100, but skip the rectangle  
-        // Bottom area: 0,100 to 100,100, but skip the rectangle
-        
-        // Create a complex polygon that covers everything except the rectangle
-        const clipPath = `polygon(
-            0% 0%, 
-            ${leftPercent}% 0%, 
-            ${leftPercent}% ${topPercent}%, 
-            ${rightPercent}% ${topPercent}%, 
-            ${rightPercent}% 0%, 
-            100% 0%, 
-            100% ${topPercent}%, 
-            100% ${bottomPercent}%, 
-            ${rightPercent}% ${bottomPercent}%, 
-            ${rightPercent}% 100%, 
-            ${leftPercent}% 100%, 
-            ${leftPercent}% ${bottomPercent}%, 
-            0% ${bottomPercent}%, 
-            0% 0%
-        )`;
-        
-        $walterImage.css({
-            'clip-path': clipPath,
-            '-webkit-clip-path': clipPath
+        $jesterImage.css({
+            'clip-path': clipValue,
+            '-webkit-clip-path': clipValue
         });
     }
 
-    // Handle mouse down
-    $rectangle.on('mousedown', function(e) {
-        isDragging = true;
-        $rectangle.addClass('dragging');
-        containerRect = $container[0].getBoundingClientRect();
-        
-        const rect = $rectangle[0].getBoundingClientRect();
-        startX = e.clientX;
-        startY = e.clientY;
-        initialLeft = rect.left - containerRect.left;
-        initialTop = rect.top - containerRect.top;
-        
-        e.preventDefault();
-    });
+    function updateDragBounds() {
+        const containerRect = $container[0].getBoundingClientRect();
+        const imgRect = $jesterImage[0].getBoundingClientRect();
+        const rectWidth = $rectangle.outerWidth();
+        const rectHeight = $rectangle.outerHeight();
 
-    // Handle mouse move
-    $(document).on('mousemove', function(e) {
-        if (!isDragging) return;
-        
-        const deltaX = e.clientX - startX;
-        const deltaY = e.clientY - startY;
-        
-        let newLeft = initialLeft + deltaX;
-        let newTop = initialTop + deltaY;
-        
-        // Constrain rectangle within container bounds
-        const rect = $rectangle[0].getBoundingClientRect();
-        const maxLeft = containerRect.width - rect.width;
-        const maxTop = containerRect.height - rect.height;
-        
-        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-        newTop = Math.max(0, Math.min(newTop, maxTop));
-        
+        // Calculate bounds relative to container
+        // We want the rectangle to stay INSIDE the image
+        dragBounds.minLeft = imgRect.left - containerRect.left;
+        dragBounds.minTop = imgRect.top - containerRect.top;
+        dragBounds.maxLeft = dragBounds.minLeft + imgRect.width - rectWidth;
+        dragBounds.maxTop = dragBounds.minTop + imgRect.height - rectHeight;
+    }
+
+    // Desktop: hover-follow interaction (no drag)
+    $container.on('mousemove', function(e) {
+        const containerRect = $container[0].getBoundingClientRect();
+        const imgRect = $jesterImage[0].getBoundingClientRect();
+        const rectWidth = $rectangle.outerWidth();
+        const rectHeight = $rectangle.outerHeight();
+
+        const isInsideImage =
+            e.clientX >= imgRect.left &&
+            e.clientX <= imgRect.right &&
+            e.clientY >= imgRect.top &&
+            e.clientY <= imgRect.bottom;
+
+        if (!isInsideImage) {
+            return;
+        }
+
+        // Ensure transform is disabled once we start controlling position
+        if ($rectangle.css('transform') !== 'none') {
+            $rectangle.css('transform', 'none');
+        }
+
+        updateDragBounds();
+
+        let newLeft = e.clientX - containerRect.left - rectWidth / 2;
+        let newTop = e.clientY - containerRect.top - rectHeight / 2;
+
+        // Constrain to image bounds
+        newLeft = Math.max(dragBounds.minLeft, Math.min(newLeft, dragBounds.maxLeft));
+        newTop = Math.max(dragBounds.minTop, Math.min(newTop, dragBounds.maxTop));
+
         $rectangle.css({
             left: newLeft + 'px',
             top: newTop + 'px'
         });
-        
-        updateClipPath();
-    });
 
-    // Handle mouse up
-    $(document).on('mouseup', function() {
-        if (isDragging) {
-            isDragging = false;
-            $rectangle.removeClass('dragging');
-        }
+        updateClipPath();
     });
 
     // Touch events for mobile
     $rectangle.on('touchstart', function(e) {
         isDragging = true;
         $rectangle.addClass('dragging');
-        containerRect = $container[0].getBoundingClientRect();
         
+        const containerRect = $container[0].getBoundingClientRect();
         const touch = e.originalEvent.touches[0];
         const rect = $rectangle[0].getBoundingClientRect();
+        
+        const currentLeft = rect.left - containerRect.left;
+        const currentTop = rect.top - containerRect.top;
+        
+        $rectangle.css({
+            'transform': 'none',
+            'left': currentLeft + 'px',
+            'top': currentTop + 'px'
+        });
+        
+        updateDragBounds(); // Calculate bounds on start
+
         startX = touch.clientX;
         startY = touch.clientY;
-        initialLeft = rect.left - containerRect.left;
-        initialTop = rect.top - containerRect.top;
+        initialLeft = currentLeft;
+        initialTop = currentTop;
         
         e.preventDefault();
     });
@@ -160,12 +142,9 @@ export function initHeroDrag() {
         let newLeft = initialLeft + deltaX;
         let newTop = initialTop + deltaY;
         
-        const rect = $rectangle[0].getBoundingClientRect();
-        const maxLeft = containerRect.width - rect.width;
-        const maxTop = containerRect.height - rect.height;
-        
-        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-        newTop = Math.max(0, Math.min(newTop, maxTop));
+        // Constrain to image bounds
+        newLeft = Math.max(dragBounds.minLeft, Math.min(newLeft, dragBounds.maxLeft));
+        newTop = Math.max(dragBounds.minTop, Math.min(newTop, dragBounds.maxTop));
         
         $rectangle.css({
             left: newLeft + 'px',
@@ -183,17 +162,34 @@ export function initHeroDrag() {
         }
     });
 
+    function setInitialRectanglePosition() {
+        const containerRect = $container[0].getBoundingClientRect();
+        const imgRect = $jesterImage[0].getBoundingClientRect();
+        const rectWidth = $rectangle.outerWidth();
+
+        updateDragBounds();
+
+        let newLeft = imgRect.left - containerRect.left + (imgRect.width - rectWidth) / 2;
+        let newTop = imgRect.top - containerRect.top;
+
+        // Constrain to image bounds to avoid overflow
+        newLeft = Math.max(dragBounds.minLeft, Math.min(newLeft, dragBounds.maxLeft));
+        newTop = Math.max(dragBounds.minTop, Math.min(newTop, dragBounds.maxTop));
+
+        $rectangle.css({
+            left: newLeft + 'px',
+            top: newTop + 'px',
+            transform: 'none'
+        });
+    }
+
     // Initial clip-path update
-    // Wait for images to load
-    $(window).on('load', function() {
+    function init() {
+        setInitialRectanglePosition();
         updateClipPath();
-    });
-    
-    // Also update immediately in case images are already loaded
-    setTimeout(updateClipPath, 100);
-    
-    // Update on window resize
-    $(window).on('resize', function() {
-        updateClipPath();
-    });
+    }
+
+    $(window).on('load resize', init);
+    setTimeout(init, 100);
+    setTimeout(init, 500);
 }
