@@ -565,13 +565,11 @@ body {
     top: -50px;
     width: 100%;
     height: 70px;
-    background: repeating-linear-gradient(
-        -45deg,
-        var(--color-black) 0,
-        var(--color-black) 14px,
-        var(--color-white) 14px,
-        var(--color-white) 28px
-    );
+    background: repeating-linear-gradient(-45deg,
+            var(--color-black) 0,
+            var(--color-black) 14px,
+            var(--color-white) 14px,
+            var(--color-white) 28px);
     border: 2px solid var(--color-black);
     transform-origin: left bottom;
     transform: rotate(calc(var(--clapper-open) * -10deg));
@@ -604,17 +602,14 @@ body {
     line-height: 1.75;
     color: var(--color-black);
     opacity: var(--clapper-text);
-    transform: translateY(calc((1 - var(--clapper-text)) * 18px))
-        skewX(calc((1 - var(--clapper-text)) * -4deg))
-        rotate(calc((1 - var(--clapper-text)) * -1deg));
-    filter: blur(calc((1 - var(--clapper-text)) * 4px))
-        saturate(calc(1 + (var(--clapper-text) * 0.4)));
+    transform: translateY(calc((1 - var(--clapper-text)) * 18px)) skewX(calc((1 - var(--clapper-text)) * -4deg)) rotate(calc((1 - var(--clapper-text)) * -1deg));
+    filter: blur(calc((1 - var(--clapper-text)) * 4px)) saturate(calc(1 + (var(--clapper-text) * 0.4)));
     text-shadow:
         calc((1 - var(--clapper-text)) * -6px) 0 rgba(0, 255, 255, 0.6),
         calc((1 - var(--clapper-text)) * 6px) 0 rgba(255, 0, 255, 0.5);
 }
 
-.clapper-text p + p {
+.clapper-text p+p {
     margin-top: 22px;
 }
 
@@ -668,7 +663,8 @@ body {
 
 /* Cream overlay that fades out to reveal content underneath */
 .band-track::before {
-    display: none; /* Replaced with .band-overlay element */
+    display: none;
+    /* Replaced with .band-overlay element */
 }
 
 /* Cream overlay element */
@@ -688,7 +684,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1; /* Behind overlay (5) and ribbons (10) */
+    z-index: 1;
+    /* Behind overlay (5) and ribbons (10) */
     background-color: #F7F5E9;
 }
 
@@ -698,13 +695,185 @@ body {
     padding: 40px;
 }
 
-.band-content-layer .section-title {
-    margin-bottom: 20px;
+/* Techno-Shaman Section Styles */
+.techno-shaman-section {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    align-items: start;
 }
 
-.band-content-layer .two-column {
+.ts-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.ts-title {
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--color-black);
+}
+
+.ts-image-left {
     width: 100%;
-    margin-top: 30px;
+    max-width: 500px;
+}
+
+.ts-image-left img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.ts-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ts-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--color-black);
+    margin: 0;
+}
+
+.ts-chat-container {
+    position: relative;
+    display: inline-block;
+}
+
+.ts-chat-box {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    padding: 20px 25px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 450px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.ts-chat-box:hover {
+    transform: scale(1.02);
+}
+
+.ts-chat-box::after {
+    content: 'Click to hear Puk Puk speak';
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    font-size: 0.7rem;
+    color: var(--color-grey);
+    opacity: 0.7;
+}
+
+.ts-chat-box.typing::after {
+    content: '';
+}
+
+
+.ts-chat-cursor {
+    display: none;
+    animation: blink 0.7s infinite;
+}
+
+.ts-chat-box.typing .ts-chat-cursor {
+    display: inline;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Puk-Puk - positioned at far right of screen */
+.ts-pukpuk {
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    transform: translateY(-50%);
+    width: 360px;
+    height: auto;
+    z-index: 5;
+}
+
+/* Typing bubbles animation */
+.ts-typing-bubbles {
+    display: flex;
+    gap: 6px;
+    padding: 8px 0;
+}
+
+.ts-typing-bubbles span {
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    animation: typingBubble 1.4s ease-in-out infinite;
+}
+
+.ts-typing-bubbles span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.ts-typing-bubbles span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingBubble {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-8px);
+        opacity: 1;
+    }
+}
+
+/* Hide typing bubbles when typing starts */
+.ts-chat-box.typing .ts-typing-bubbles {
+    display: none;
+}
+
+/* Initially hide the chat text (show bubbles instead) */
+.ts-chat-text {
+    margin: 0;
+    display: none;
+}
+
+.ts-chat-text.typing {
+    display: inline;
+}
+
+.ts-body-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-black);
+}
+
+.ts-body-text p {
+    margin-bottom: 15px;
+}
+
+.ts-body-text p:last-child {
+    margin-bottom: 0;
 }
 
 .band {
@@ -723,7 +892,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     z-index: 10;
 }
 
@@ -732,33 +901,38 @@ body {
     text-align: center;
 }
 
-.band-1 { /* THE VISIONARY - Left to Right */
+.band-1 {
+    /* THE VISIONARY - Left to Right */
     top: 15%;
     transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(4deg);
 }
 
-.band-2 { /* FREEDOM OF EXPRESSION - Right to Left */
+.band-2 {
+    /* FREEDOM OF EXPRESSION - Right to Left */
     top: 28%;
     transform: translateX(calc(30% - (var(--band-progress) * 260%))) rotate(-3deg);
 }
 
-.band-3 { /* PROTEST - Left to Right */
+.band-3 {
+    /* PROTEST - Left to Right */
     top: 48%;
     transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(5deg);
 }
 
-.band-4 { /* ACTIVIST - Right to Left */
+.band-4 {
+    /* ACTIVIST - Right to Left */
     top: 65%;
     transform: translateX(calc(30% - (var(--band-progress) * 260%))) rotate(-4deg);
 }
 
-.band-5 { /* AVANT-GARDE ANARCHIST - Left to Right */
+.band-5 {
+    /* AVANT-GARDE ANARCHIST - Left to Right */
     top: 80%;
     transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(2deg);
 }
 
 /* Next section - flows normally after band-transition */
-.band-transition + .content-section {
+.band-transition+.content-section {
     position: relative;
     background-color: #F7F5E9;
 }
@@ -1059,6 +1233,24 @@ body::before {
     .two-column {
         grid-template-columns: 1fr;
         gap: 40px;
+    }
+
+    .techno-shaman-section {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .ts-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .ts-pukpuk {
+        width: 200px;
+        right: 20px;
+    }
+
+    .ts-chat-box {
+        max-width: 100%;
     }
 
     .two-column.reverse {

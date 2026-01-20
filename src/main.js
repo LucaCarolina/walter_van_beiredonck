@@ -17,7 +17,7 @@ import { initHeroDrag } from './heroDrag.js'
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize hero drag interaction
     initHeroDrag()
-    
+
     const introSection = document.querySelector('#introClapperSection')
     const bandSection = document.querySelector('#bandTransition')
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const rect = bandSection.getBoundingClientRect()
         const viewportHeight = window.innerHeight
         const scrollDistance = rect.height - viewportHeight
-        
+
         // Start animation earlier: when the section top is 80% into the viewport
         const startOffset = viewportHeight * 0.8
         const totalDistance = scrollDistance + startOffset
-        
+
         let progress = 0
-        
+
         if (totalDistance > 0) {
             progress = (startOffset - rect.top) / totalDistance
             progress = clamp(progress, 0, 1)
@@ -84,4 +84,47 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateAll)
 
     console.log('Walter Van Beiredonck site initialized')
+
+    // Puk Puk typing effect with bubbles
+    const chatBox = document.getElementById('pukPukChat')
+    const chatText = document.getElementById('pukPukText')
+    const typingBubbles = document.getElementById('typingBubbles')
+
+    if (chatBox && chatText && typingBubbles) {
+        const fullText = chatText.textContent
+        let isTyping = false
+        let hasTyped = false
+
+        chatBox.addEventListener('click', () => {
+            if (isTyping || hasTyped) return
+
+            isTyping = true
+            hasTyped = true
+            chatBox.classList.add('typing')
+            
+            // Hide bubbles and show text element
+            typingBubbles.style.display = 'none'
+            chatText.textContent = ''
+            chatText.classList.add('typing')
+
+            let i = 0
+            const typeSpeed = 30 // milliseconds per character
+
+            const typeWriter = () => {
+                if (i < fullText.length) {
+                    chatText.textContent += fullText.charAt(i)
+                    i++
+                    setTimeout(typeWriter, typeSpeed)
+                } else {
+                    // Typing complete
+                    isTyping = false
+                    setTimeout(() => {
+                        chatBox.classList.remove('typing')
+                    }, 500)
+                }
+            }
+
+            typeWriter()
+        })
+    }
 })
