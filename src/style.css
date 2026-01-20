@@ -649,6 +649,120 @@ body {
     will-change: transform, opacity;
 }
 
+/* Scroll Transition Bands */
+.band-transition {
+    --band-progress: 0;
+    height: 250vh;
+    position: relative;
+    /* NO background - transparent */
+}
+
+.band-track {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    /* NO background - content shows through */
+}
+
+/* Cream overlay that fades out to reveal content underneath */
+.band-track::before {
+    display: none; /* Replaced with .band-overlay element */
+}
+
+/* Cream overlay element */
+.band-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: #F7F5E9;
+    z-index: 5;
+    pointer-events: none;
+    opacity: calc(1 - clamp(0, calc((var(--band-progress) - 0.5) / 0.2), 1));
+}
+
+/* Content layer - inside band-track, behind overlay and ribbons */
+.band-content-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1; /* Behind overlay (5) and ribbons (10) */
+    background-color: #F7F5E9;
+}
+
+.band-content-inner {
+    width: 100%;
+    max-width: 1400px;
+    padding: 40px;
+}
+
+.band-content-layer .section-title {
+    margin-bottom: 20px;
+}
+
+.band-content-layer .two-column {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.band {
+    position: absolute;
+    left: 50%;
+    width: 150vw;
+    background-color: var(--color-red);
+    color: var(--color-white);
+    padding: 20px 50px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    white-space: nowrap;
+    will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    z-index: 10;
+}
+
+.band span {
+    display: block;
+    text-align: center;
+}
+
+.band-1 { /* THE VISIONARY - Left to Right */
+    top: 15%;
+    transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(4deg);
+}
+
+.band-2 { /* FREEDOM OF EXPRESSION - Right to Left */
+    top: 28%;
+    transform: translateX(calc(30% - (var(--band-progress) * 260%))) rotate(-3deg);
+}
+
+.band-3 { /* PROTEST - Left to Right */
+    top: 48%;
+    transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(5deg);
+}
+
+.band-4 { /* ACTIVIST - Right to Left */
+    top: 65%;
+    transform: translateX(calc(30% - (var(--band-progress) * 260%))) rotate(-4deg);
+}
+
+.band-5 { /* AVANT-GARDE ANARCHIST - Left to Right */
+    top: 80%;
+    transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(2deg);
+}
+
+/* Next section - flows normally after band-transition */
+.band-transition + .content-section {
+    position: relative;
+    background-color: #F7F5E9;
+}
+
 .section-title {
     font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
     font-size: clamp(2rem, 5vw, 4rem);
@@ -978,6 +1092,16 @@ body::before {
         max-width: 520px;
     }
 
+    .band-transition {
+        height: 180vh;
+    }
+
+    .band {
+        width: 140vw;
+        padding: 14px 40px;
+        font-size: clamp(1.4rem, 6vw, 2.6rem);
+    }
+
     .hero-image-container {
         height: 60vh;
         min-height: 400px;
@@ -1015,6 +1139,12 @@ body::before {
 
     .intro-clapper {
         padding: 60px 15px;
+    }
+
+    .band {
+        width: 160vw;
+        padding: 12px 28px;
+        font-size: clamp(1.2rem, 7vw, 2.2rem);
     }
 
     .clapper-title {
