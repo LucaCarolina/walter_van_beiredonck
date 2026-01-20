@@ -85,27 +85,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Walter Van Beiredonck site initialized')
 
-    // Puk Puk typing effect with bubbles
+    // Puk Puk typing effect
     const chatBox = document.getElementById('pukPukChat')
     const chatText = document.getElementById('pukPukText')
-    const typingBubbles = document.getElementById('typingBubbles')
+    const typingIndicator = document.getElementById('typingIndicator')
 
-    if (chatBox && chatText && typingBubbles) {
-        const fullText = chatText.textContent
+    if (chatBox && chatText && typingIndicator) {
+        const fullText = chatText.textContent.trim()
+        const fullHTML = chatText.innerHTML.trim()
         let isTyping = false
         let hasTyped = false
+
+        // Initially hide the text, show typing indicator
+        chatText.textContent = ''
 
         chatBox.addEventListener('click', () => {
             if (isTyping || hasTyped) return
 
             isTyping = true
             hasTyped = true
+
+            // Hide typing indicator, show text container, expand box
+            typingIndicator.classList.add('hidden')
+            chatText.classList.add('visible')
             chatBox.classList.add('typing')
-            
-            // Hide bubbles and show text element
-            typingBubbles.style.display = 'none'
-            chatText.textContent = ''
-            chatText.classList.add('typing')
+            chatBox.classList.add('expanded')
 
             let i = 0
             const typeSpeed = 30 // milliseconds per character
@@ -116,10 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     i++
                     setTimeout(typeWriter, typeSpeed)
                 } else {
-                    // Typing complete
+                    // Typing complete - restore HTML with span for underline
                     isTyping = false
+                    chatText.innerHTML = fullHTML
                     setTimeout(() => {
                         chatBox.classList.remove('typing')
+                        chatBox.classList.add('typing-done')
                     }, 500)
                 }
             }

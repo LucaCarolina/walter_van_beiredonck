@@ -598,7 +598,7 @@ body {
 
 .clapper-text {
     font-family: 'Space Mono', monospace;
-    font-size: 1rem;
+    font-size: 18px;
     line-height: 1.75;
     color: var(--color-black);
     opacity: var(--clapper-text);
@@ -701,6 +701,7 @@ body {
     grid-template-columns: 1fr 1.2fr;
     gap: 40px;
     align-items: start;
+    position: relative;
 }
 
 .ts-left {
@@ -737,27 +738,51 @@ body {
 
 .ts-date {
     font-family: 'Space Mono', monospace;
-    font-size: 1rem;
+    font-size: 18px;
     color: var(--color-black);
     margin: 0;
+    margin-top: -40px;
 }
 
 .ts-chat-container {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+    margin-top: 60px;
+    min-height: 280px;
 }
 
 .ts-chat-box {
     background-color: var(--color-black);
     color: var(--color-white);
-    padding: 20px 25px;
+    padding: 30px 40px;
     font-family: 'Space Mono', monospace;
-    font-size: 0.95rem;
+    font-size: 18px;
     line-height: 1.6;
-    max-width: 450px;
+    width: fit-content;
     position: relative;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, width 0.3s ease;
+    overflow: hidden;
+    text-align: left;
+}
+
+.ts-chat-box.expanded {
+    width: 100%;
+}
+
+.ts-highlight-text {
+    background-color: transparent;
+    transition: background-color 0.5s ease;
+    padding: 2px 4px;
+    margin: 0 -4px;
+}
+
+.ts-chat-box.typing-done .ts-highlight-text {
+    background-color: #FF0000;
 }
 
 .ts-chat-box:hover {
@@ -778,6 +803,62 @@ body {
     content: '';
 }
 
+/* Typing indicator - 3 bouncing dots */
+.ts-typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 5px 0;
+}
+
+.ts-typing-indicator span {
+    width: 14px;
+    height: 14px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.ts-typing-indicator span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.ts-typing-indicator span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.ts-typing-indicator span:nth-child(3) {
+    animation-delay: 0s;
+}
+
+@keyframes typingBounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.ts-typing-indicator.hidden {
+    display: none;
+}
+
+.ts-chat-text {
+    margin: 0;
+    display: none;
+}
+
+.ts-chat-text.visible {
+    display: inline;
+}
 
 .ts-chat-cursor {
     display: none;
@@ -801,71 +882,23 @@ body {
     }
 }
 
-/* Puk-Puk - positioned at far right of screen */
 .ts-pukpuk {
     position: absolute;
     top: 50%;
-    right: 40px;
+    right: 0;
     transform: translateY(-50%);
-    width: 360px;
+    width: 450px;
     height: auto;
-    z-index: 5;
-}
-
-/* Typing bubbles animation */
-.ts-typing-bubbles {
-    display: flex;
-    gap: 6px;
-    padding: 8px 0;
-}
-
-.ts-typing-bubbles span {
-    width: 12px;
-    height: 12px;
-    background-color: var(--color-white);
-    border-radius: 50%;
-    animation: typingBubble 1.4s ease-in-out infinite;
-}
-
-.ts-typing-bubbles span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.ts-typing-bubbles span:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-@keyframes typingBubble {
-    0%, 60%, 100% {
-        transform: translateY(0);
-        opacity: 0.4;
-    }
-    30% {
-        transform: translateY(-8px);
-        opacity: 1;
-    }
-}
-
-/* Hide typing bubbles when typing starts */
-.ts-chat-box.typing .ts-typing-bubbles {
-    display: none;
-}
-
-/* Initially hide the chat text (show bubbles instead) */
-.ts-chat-text {
-    margin: 0;
-    display: none;
-}
-
-.ts-chat-text.typing {
-    display: inline;
+    z-index: 15;
+    pointer-events: none;
 }
 
 .ts-body-text {
     font-family: 'Space Mono', monospace;
-    font-size: 0.95rem;
+    font-size: 18px;
     line-height: 1.7;
     color: var(--color-black);
+    margin-top: 30px;
 }
 
 .ts-body-text p {
@@ -966,7 +999,7 @@ body {
 
 .section-subtitle {
     font-family: 'Space Mono', monospace;
-    font-size: 1rem;
+    font-size: 18px;
     color: var(--color-grey);
     margin-bottom: 40px;
     font-style: italic;
@@ -995,7 +1028,7 @@ body {
 
 .column-text {
     font-family: 'Space Mono', monospace;
-    font-size: 1rem;
+    font-size: 18px;
     line-height: 1.8;
     text-align: justify;
 }
@@ -1244,13 +1277,22 @@ body::before {
         font-size: clamp(2rem, 8vw, 3rem);
     }
 
+    .ts-chat-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     .ts-pukpuk {
-        width: 200px;
-        right: 20px;
+        width: 250px;
     }
 
     .ts-chat-box {
         max-width: 100%;
+        font-size: 16px;
+    }
+
+    .ts-body-text {
+        margin-top: 40px;
     }
 
     .two-column.reverse {
