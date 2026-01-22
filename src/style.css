@@ -964,7 +964,306 @@ body {
     transform: translateX(calc(-130% + (var(--band-progress) * 260%))) rotate(2deg);
 }
 
-/* Next section - flows normally after band-transition */
+/* W.&L.T. Horizontal Scroll Section */
+.wlt-section {
+    position: relative;
+    /* Height will be controlled by ScrollTrigger/pinned */
+    background-color: var(--color-black);
+    overflow: hidden;
+}
+
+.wlt-container {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Background Parallax */
+.wlt-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10vh;
+    opacity: 0.3;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.wlt-bg-text-row {
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 15vh;
+    color: var(--color-red);
+    white-space: nowrap;
+    line-height: 1;
+    font-weight: bold;
+    display: flex;
+    width: max-content;
+    /* Ensure it's wide enough */
+}
+
+/* Track for horizontal movement */
+.wlt-track {
+    display: flex;
+    align-items: center;
+    padding-left: 10vw;
+    /* Initial offset */
+    gap: 10vw;
+    /* Space between cards */
+    z-index: 10;
+    position: relative;
+    height: 100%;
+}
+
+.wlt-card {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Intro Card - Match Flip Card Exactly */
+.intro-card {
+    width: 300px;
+    height: 450px;
+    background-color: var(--color-black);
+    border: 2px solid var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .intro-card {
+        width: 240px;
+        height: 360px;
+    }
+}
+
+.wlt-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Hide original text elements just in case they are referenced somewhere else or added back */
+.wlt-title,
+.wlt-subtitle,
+.wlt-description {
+    display: none;
+}
+
+/* Flip Cards */
+.flip-card {
+    width: 300px;
+    height: 450px;
+    perspective: 1000px;
+    opacity: 0;
+    /* Hidden initially, controlled by JS */
+    transform: translateX(50px);
+    /* Slide in effect */
+}
+
+/* Mobile adjustments for card size */
+@media (max-width: 768px) {
+    .flip-card {
+        width: 240px;
+        height: 360px;
+    }
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border: 2px solid var(--color-white);
+    background-color: var(--color-black);
+}
+
+.flip-card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    color: var(--color-white);
+    background-color: var(--color-red);
+    /* W.&L.T. Red */
+    border: 2px solid var(--color-black);
+}
+
+.flip-card-back h3 {
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: var(--color-black);
+}
+
+.flip-card-back p {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--color-black);
+}
+
+.flip-card-back .card-desc {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.card-arrow {
+    margin-top: 30px;
+    font-size: 2rem;
+    color: var(--color-black);
+}
+
+/* Termination Card - Centered and Isolated */
+.termination-card {
+    width: 100vw;
+    /* Full width to isolate it */
+    height: 100vh;
+    /* Full height */
+    margin-right: 0;
+    margin-left: 15vw;
+    /* Push it far from the last card */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.termination-wrapper {
+    position: relative;
+    width: 500px;
+    /* Or appropriate max-width */
+    height: 700px;
+    max-height: 90vh;
+}
+
+.term-piece {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}
+
+.term-piece img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Slicing logic using clip-path on the containers */
+.term-piece.top {
+    clip-path: inset(0 0 66% 0);
+    z-index: 3;
+}
+
+.term-piece.mid {
+    clip-path: inset(34% 0 34% 0);
+    z-index: 2;
+}
+
+.term-piece.bot {
+    clip-path: inset(66% 0 0 0);
+    z-index: 1;
+}
+
+/* Interactive Overlay */
+.term-overlay {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    pointer-events: auto;
+    /* Ensure clickable */
+}
+
+.term-text {
+    font-family: 'Space Mono', monospace;
+    color: var(--color-white);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    background: var(--color-black);
+    padding: 5px;
+}
+
+.term-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #333;
+    border: 1px solid var(--color-white);
+    position: relative;
+}
+
+.term-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--color-red);
+    transition: width 0.1s linear;
+}
+
+/* Helper to hide next sections */
+body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.band-transition) {
+    display: none !important;
+}
+
+/* Ensure smooth transition when unlocking */
+section {
+    animation: fadeInSection 1s ease forwards;
+}
+
+@keyframes fadeInSection {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 .band-transition+.content-section {
     position: relative;
     background-color: #F7F5E9;

@@ -8,6 +8,7 @@ window.$ = $
 
 // Import interaction modules
 import { initHeroDrag } from './heroDrag.js'
+import { initWltScroll } from './wltScroll.js'
 
 // This file serves as the entry point for Vite
 // All JavaScript functionality will be organized into separate modules
@@ -17,6 +18,7 @@ import { initHeroDrag } from './heroDrag.js'
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize hero drag interaction
     initHeroDrag()
+    initWltScroll()
 
     const introSection = document.querySelector('#introClapperSection')
     const bandSection = document.querySelector('#bandTransition')
