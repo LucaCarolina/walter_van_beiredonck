@@ -1006,7 +1006,7 @@ body {
     line-height: 1;
     font-weight: bold;
     display: flex;
-    width: 300%;
+    width: max-content;
     /* Ensure it's wide enough */
 }
 
@@ -1016,7 +1016,7 @@ body {
     align-items: center;
     padding-left: 10vw;
     /* Initial offset */
-    gap: 15vw;
+    gap: 10vw;
     /* Space between cards */
     z-index: 10;
     position: relative;
@@ -1033,8 +1033,8 @@ body {
 
 /* Intro Card - Match Flip Card Exactly */
 .intro-card {
-    width: 400px;
-    height: 600px;
+    width: 300px;
+    height: 450px;
     background-color: var(--color-black);
     border: 2px solid var(--color-white);
     display: flex;
@@ -1046,8 +1046,8 @@ body {
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .intro-card {
-        width: 300px;
-        height: 450px;
+        width: 240px;
+        height: 360px;
     }
 }
 
@@ -1058,24 +1058,28 @@ body {
 }
 
 /* Hide original text elements just in case they are referenced somewhere else or added back */
-.wlt-title, .wlt-subtitle, .wlt-description {
+.wlt-title,
+.wlt-subtitle,
+.wlt-description {
     display: none;
 }
 
 /* Flip Cards */
 .flip-card {
-    width: 400px;
-    height: 600px;
+    width: 300px;
+    height: 450px;
     perspective: 1000px;
-    opacity: 0; /* Hidden initially, controlled by JS */
-    transform: translateX(50px); /* Slide in effect */
+    opacity: 0;
+    /* Hidden initially, controlled by JS */
+    transform: translateX(50px);
+    /* Slide in effect */
 }
 
 /* Mobile adjustments for card size */
 @media (max-width: 768px) {
     .flip-card {
-        width: 300px;
-        height: 450px;
+        width: 240px;
+        height: 360px;
     }
 }
 
@@ -1118,7 +1122,8 @@ body {
     align-items: center;
     padding: 30px;
     color: var(--color-white);
-    background-color: var(--color-red); /* W.&L.T. Red */
+    background-color: var(--color-red);
+    /* W.&L.T. Red */
     border: 2px solid var(--color-black);
 }
 
@@ -1149,10 +1154,13 @@ body {
 
 /* Termination Card - Centered and Isolated */
 .termination-card {
-    width: 100vw; /* Full width to isolate it */
-    height: 100vh; /* Full height */
+    width: 100vw;
+    /* Full width to isolate it */
+    height: 100vh;
+    /* Full height */
     margin-right: 0;
-    margin-left: 50vw; /* Push it far from the last card */
+    margin-left: 15vw;
+    /* Push it far from the last card */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1161,7 +1169,8 @@ body {
 
 .termination-wrapper {
     position: relative;
-    width: 500px; /* Or appropriate max-width */
+    width: 500px;
+    /* Or appropriate max-width */
     height: 700px;
     max-height: 90vh;
 }
@@ -1207,7 +1216,8 @@ body {
     width: 100%;
     text-align: center;
     z-index: 10;
-    pointer-events: auto; /* Ensure clickable */
+    pointer-events: auto;
+    /* Ensure clickable */
 }
 
 .term-text {
@@ -1245,8 +1255,13 @@ section {
 }
 
 @keyframes fadeInSection {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .band-transition+.content-section {
