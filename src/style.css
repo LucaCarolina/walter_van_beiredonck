@@ -525,6 +525,7 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 80px 40px;
+    background-color: #F7F5E9;
 }
 
 /* Intro Clapperboard Section */
@@ -972,6 +973,15 @@ body {
     overflow: hidden;
 }
 
+/* After crushing, hide the background so it doesn't show behind other sections */
+.wlt-section.crushed {
+    background-color: transparent !important;
+}
+
+.wlt-section.crushed .wlt-background {
+    visibility: hidden;
+}
+
 .wlt-container {
     width: 100%;
     height: 100vh;
@@ -1249,19 +1259,461 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     display: none !important;
 }
 
-/* Ensure smooth transition when unlocking */
-section {
-    animation: fadeInSection 1s ease forwards;
+/* Sections are shown/hidden via .wlt-locked class */
+
+/* ========================================
+   AESTHETICTERRORISTS Section - Pinned Scroll
+   ======================================== */
+.aesth-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--color-black);
+    overflow: hidden;
 }
 
-@keyframes fadeInSection {
-    from {
-        opacity: 0;
-    }
+.aesth-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 
-    to {
+/* Runway Layer - Background, center of scene */
+.aesth-runway {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.aesth-runway img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: bottom center;
+}
+
+/* Crowd Layers - Bottom corners */
+.aesth-crowd {
+    position: absolute;
+    bottom: -5%;
+    width: 55%;
+    height: auto;
+    max-height: 85%;
+    opacity: 0;
+    z-index: 2;
+    overflow: visible;
+}
+
+.aesth-crowd img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    object-position: bottom;
+}
+
+.aesth-crowd-left {
+    left: -15%;
+    bottom: -200px;
+    opacity: 0;
+}
+
+.aesth-crowd-right {
+    right: -15%;
+    bottom: -200px;
+    opacity: 0;
+}
+
+/* Protest Banner Layer - Top of screen */
+.aesth-protest {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%) rotate(-5deg);
+    width: 140%;
+    opacity: 0;
+    z-index: 10;
+}
+
+.aesth-protest img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Text Overlay on Protest Banner */
+.aesth-text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 4;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.aesth-title {
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: bold;
+    color: var(--color-white);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow:
+        3px 3px 0 var(--color-black),
+        -1px -1px 0 var(--color-black),
+        1px -1px 0 var(--color-black),
+        -1px 1px 0 var(--color-black);
+    margin-bottom: 5px;
+}
+
+.aesth-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.9rem, 2vw, 1.5rem);
+    color: var(--color-white);
+    text-shadow: 2px 2px 0 var(--color-black);
+    font-weight: bold;
+    margin-top: -25px;
+}
+
+/* Model Layer - Center of screen */
+.aesth-model {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.aesth-model img {
+    max-height: 55vh;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Model Chat Box - Speech bubble from model */
+.model-chatbox {
+    position: absolute;
+    top: 10%;
+    left: calc(100% - 50px);
+    background-color: #2a2a2a;
+    color: var(--color-white);
+    padding: 20px 25px;
+    width: 320px;
+    min-height: 50px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0;
+    z-index: 10;
+    border-radius: 4px;
+}
+
+/* Folded corner effect for model chatbox */
+.model-chatbox::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 40px 0 0 40px;
+    border-color: transparent transparent transparent #808080;
+}
+
+/* Speech bubble pointer */
+.model-chatbox::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: -15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #2a2a2a transparent transparent;
+}
+
+/* Model typing indicator */
+.model-typing-indicator {
+    display: flex;
+    gap: 6px;
+    padding: 5px 0;
+}
+
+.model-typing-indicator span {
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    animation: modelTypingBounce 1.4s infinite ease-in-out;
+}
+
+.model-typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.model-typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.model-typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes modelTypingBounce {
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
         opacity: 1;
     }
+}
+
+.model-typing-indicator.hidden {
+    display: none;
+}
+
+.model-chat-text {
+    display: none;
+    margin: 0;
+}
+
+.model-chat-text.visible {
+    display: block;
+}
+
+/* Walter Layer - Same position as model */
+.aesth-walter {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.aesth-walter img {
+    max-height: 46vh; /* In between model (55vh) and a third smaller (37vh) */
+    width: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Walter Chat Box - Speech bubble from walter (click to trigger) */
+.walter-chatbox {
+    position: absolute;
+    top: 10%;
+    left: calc(100% - 50px);
+    background-color: #2a2a2a;
+    color: var(--color-white);
+    padding: 20px 25px;
+    width: 320px;
+    min-height: 50px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0;
+    z-index: 10;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Folded corner effect for walter chatbox */
+.walter-chatbox::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 40px 0 0 40px;
+    border-color: transparent transparent transparent #808080;
+}
+
+/* Speech bubble pointer for walter */
+.walter-chatbox::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: -15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #2a2a2a transparent transparent;
+}
+
+/* Walter typing indicator */
+.walter-typing-indicator {
+    display: flex;
+    gap: 6px;
+    padding: 5px 0;
+}
+
+.walter-typing-indicator span {
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    animation: walterTypingBounce 1.4s infinite ease-in-out;
+}
+
+.walter-typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.walter-typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.walter-typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes walterTypingBounce {
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.walter-typing-indicator.hidden {
+    display: none;
+}
+
+.walter-chat-text {
+    display: none;
+    margin: 0;
+}
+
+.walter-chat-text.visible {
+    display: block;
+}
+
+/* Chat Box - Speech bubble from right crowd */
+.aesth-chatbox {
+    position: absolute;
+    top: -100px;
+    left: calc(50% + 200px);
+    transform: translateX(-50%) scaleX(-1) rotate(15deg);
+    /* Counter scaleX and rotate to cancel parent's scaleX(-1) and -15deg rotation */
+    background-color: #2a2a2a;
+    color: var(--color-white);
+    padding: 18px 22px;
+    width: 90px;
+    min-height: 45px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0;
+    z-index: 10;
+    cursor: pointer;
+    transition: width 0.3s ease, padding 0.3s ease, min-height 0.3s ease;
+}
+
+.aesth-chatbox.expanded {
+    width: 350px;
+    padding: 25px 28px;
+    min-height: 70px;
+}
+
+/* Speech bubble tail pointing down-left */
+.aesth-chatbox::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 20px 25px 0 0;
+    border-color: #2a2a2a transparent transparent transparent;
+}
+
+/* Typing indicator */
+.aesth-typing-indicator {
+    display: flex;
+    gap: 8px;
+    padding: 10px 0;
+}
+
+.aesth-typing-indicator span {
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    animation: aesthTypingBounce 1.4s infinite ease-in-out;
+}
+
+.aesth-typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.aesth-typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.aesth-typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes aesthTypingBounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.aesth-typing-indicator.hidden {
+    display: none;
+}
+
+.aesth-chat-text {
+    display: none;
+    margin: 0;
+}
+
+.aesth-chat-text.visible {
+    display: block;
 }
 
 .band-transition+.content-section {

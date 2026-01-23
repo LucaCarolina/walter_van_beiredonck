@@ -9,6 +9,7 @@ window.$ = $
 // Import interaction modules
 import { initHeroDrag } from './heroDrag.js'
 import { initWltScroll } from './wltScroll.js'
+import { initAesthScroll } from './aesthScroll.js'
 
 // This file serves as the entry point for Vite
 // All JavaScript functionality will be organized into separate modules
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize hero drag interaction
     initHeroDrag()
     initWltScroll()
+    initAesthScroll()
 
     const introSection = document.querySelector('#introClapperSection')
     const bandSection = document.querySelector('#bandTransition')
@@ -133,6 +135,61 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             typeWriter()
+        })
+    }
+
+    // AESTHETICTERRORISTS chat box typing effect (on hover over crowd)
+    const aesthCrowdLeft = document.querySelector('.aesth-crowd-left')
+    const aesthChatbox = document.getElementById('aesthChatbox')
+    const aesthChatText = document.getElementById('aesthChatText')
+    const aesthTypingIndicator = document.getElementById('aesthTypingIndicator')
+
+    if (aesthCrowdLeft && aesthChatbox && aesthChatText && aesthTypingIndicator) {
+        const fullText = "In a move that would have crushed a lesser artist, Walter lost his financial backing and was legally prohibited from using his own name on his creations. Most designers would have vanished into the archives, but Walter went underground. Stripped of his identity, he launched a ghost label"
+        let isTyping = false
+        let typewriterTimeout = null
+
+        // Trigger on hover over the left crowd
+        aesthCrowdLeft.addEventListener('mouseenter', () => {
+            if (isTyping) return
+
+            isTyping = true
+
+            // Expand box, hide typing indicator, show text container
+            aesthChatbox.classList.add('expanded')
+            aesthTypingIndicator.classList.add('hidden')
+            aesthChatText.classList.add('visible')
+            aesthChatText.textContent = ''
+
+            let i = 0
+            const typeSpeed = 25 // milliseconds per character
+
+            const typeWriter = () => {
+                if (i < fullText.length && isTyping) {
+                    aesthChatText.textContent += fullText.charAt(i)
+                    i++
+                    typewriterTimeout = setTimeout(typeWriter, typeSpeed)
+                } else {
+                    isTyping = false
+                }
+            }
+
+            typeWriter()
+        })
+
+        // Reset on mouse leave
+        aesthCrowdLeft.addEventListener('mouseleave', () => {
+            isTyping = false
+            if (typewriterTimeout) {
+                clearTimeout(typewriterTimeout)
+                typewriterTimeout = null
+            }
+
+            // Collapse box, show typing indicator, hide text
+            aesthChatbox.classList.remove('expanded')
+            aesthTypingIndicator.classList.remove('hidden')
+            aesthChatText.classList.remove('visible')
+            aesthChatText.textContent = ''
         })
     }
 })

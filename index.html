@@ -300,25 +300,70 @@
     </div>
   </section>
 
-  <!-- Aestheticterrorists Section -->
-  <section class="content-section">
-    <h2 class="section-title">AESTHETICTERRORISTS</h2>
-    <p class="section-subtitle">2001-2002 | Rebellion Through Surrealism</p>
-    <div class="two-column">
-      <div class="column-text">
-        <p>The Aestheticterrorists collection represents a peak in Van Beirendonck's exploration of surrealism
-          and political commentary. Created during a period of global uncertainty, these designs served as
-          both armor and weapon—protecting the wearer while challenging the viewer.</p>
-        <p>This collection featured distorted silhouettes, unexpected material combinations, and imagery that
-          defied conventional beauty standards. Each piece was a manifesto, declaring independence from
-          mainstream fashion and embracing the power of the unconventional.</p>
+  <!-- Aestheticterrorists Section - Pinned Scroll Animation -->
+  <section class="aesth-section" id="aesthSection">
+    <div class="aesth-container">
+      <!-- Base: Black background (inherent) -->
+
+      <!-- Layer 1: Runway (appears from bottom) -->
+      <div class="aesth-runway">
+        <img src="/photos/runway.png" alt="Fashion Runway">
       </div>
-      <div class="column-image">
-        <div class="image-placeholder"></div>
+
+      <!-- Layer 2: Crowd (appears from sides) -->
+      <div class="aesth-crowd aesth-crowd-left">
+        <img src="/photos/crowd.png" alt="Audience Left">
+        <!-- Chat box emerging from crowd -->
+        <div class="aesth-chatbox" id="aesthChatbox">
+          <div class="aesth-typing-indicator" id="aesthTypingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p class="aesth-chat-text" id="aesthChatText"></p>
+        </div>
       </div>
-    </div>
-    <div class="button-center">
-      <button class="gta-button">GTA</button>
+      <div class="aesth-crowd aesth-crowd-right">
+        <img src="/photos/crowd.png" alt="Audience Right">
+      </div>
+
+      <!-- Layer 3: Protest Banner (appears) -->
+      <div class="aesth-protest">
+        <img src="/photos/protest1.png" alt="Aesthetic Terrorists Protest">
+        <!-- Text overlay on protest banner -->
+        <div class="aesth-text-overlay">
+          <h2 class="aesth-title glitch" data-text="AESTHETICTERRORISTS">AESTHETICTERRORISTS</h2>
+          <p class="aesth-subtitle">The "Rebel" becomes a "Resister"</p>
+        </div>
+      </div>
+
+      <!-- Layer 4: Model (appears in center, then moves down) -->
+      <div class="aesth-model">
+        <img src="/photos/model.png" alt="Model">
+        <!-- Chat box from model -->
+        <div class="model-chatbox" id="modelChatbox">
+          <div class="model-typing-indicator" id="modelTypingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p class="model-chat-text" id="modelChatText"></p>
+        </div>
+      </div>
+
+      <!-- Layer 5: Walter (appears after model exits) -->
+      <div class="aesth-walter">
+        <img src="/photos/walter.png" alt="Walter Van Beirendonck">
+        <!-- Chat box from walter - click to trigger -->
+        <div class="walter-chatbox" id="walterChatbox">
+          <div class="walter-typing-indicator" id="walterTypingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p class="walter-chat-text" id="walterChatText"></p>
+        </div>
+      </div>
     </div>
   </section>
 
