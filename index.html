@@ -313,7 +313,10 @@
       <!-- Layer 2: Crowd (appears from sides) -->
       <div class="aesth-crowd aesth-crowd-left">
         <img src="/photos/crowd.png" alt="Audience Left">
-        <!-- Chat box emerging from crowd -->
+      </div>
+      <div class="aesth-crowd aesth-crowd-right">
+        <img src="/photos/crowd.png" alt="Audience Right">
+        <!-- Chat box emerging from RIGHT crowd -->
         <div class="aesth-chatbox" id="aesthChatbox">
           <div class="aesth-typing-indicator" id="aesthTypingIndicator">
             <span></span>
@@ -322,9 +325,6 @@
           </div>
           <p class="aesth-chat-text" id="aesthChatText"></p>
         </div>
-      </div>
-      <div class="aesth-crowd aesth-crowd-right">
-        <img src="/photos/crowd.png" alt="Audience Right">
       </div>
 
       <!-- Layer 3: Protest Banner (appears) -->
@@ -367,28 +367,39 @@
     </div>
   </section>
 
-  <!-- The Court Jester Hero Section -->
-  <section class="hero-section-court-jester">
-    <div class="court-jester-bg">
-      <h2 class="court-jester-title glitch" data-text="THE COURT JESTER">THE COURT JESTER</h2>
+  <!-- Rebellion Through Truth / The Court Jester -->
+  <section class="truth-section" id="truthSection" aria-label="Rebellion Through Truth">
+    <div class="truth-banner">
+      <h2 class="truth-banner-title">Rebellion Through Truth</h2>
+    </div>
+
+    <div class="truth-stage">
+      <p class="truth-era">2010s—PRESENT</p>
+
+      <div class="truth-layout">
+        <div class="truth-card">
+          <h3 class="truth-title">THE COURT<br>JESTER</h3>
+          <div class="truth-body">
+            <p>Walter eventually returned to his own name, but the mission had changed. He stepped into the role of the Court Jester—the only figure in the royal court historically allowed to mock the King without losing his head. In a hyper-commercialized luxury industry, Walter remains one of the few fiercely independent voices left.</p>
+            <p>As the Court Jester, he uses humor, oversized silhouettes, and “Terror Masks” to say the things that the luxury conglomerates are too afraid to whisper. He mocks the vanity of the industry while simultaneously crafting its most complex, wearable art.</p>
+          </div>
+        </div>
+
+        <div class="truth-visual" aria-hidden="true">
+          <img src="/photos/walter-truth-jester.png" alt="" class="truth-image">
+        </div>
+      </div>
+
+      <img src="/photos/mark.png" alt="" class="truth-mark" aria-hidden="true">
     </div>
   </section>
 
-  <!-- Rebellion Through Truth Section -->
-  <section class="content-section">
-    <h2 class="section-title">Rebellion Through Truth</h2>
-    <p class="section-subtitle">2010 - PROTEST</p>
-    <div class="two-column reverse">
-      <div class="column-image">
-        <div class="image-placeholder"></div>
-      </div>
-      <div class="column-text">
-        <p>In 2010, Van Beirendonck turned his focus to protest and activism, using fashion as a platform for
-          truth-telling. This collection featured bold graphics, political slogans, and designs that directly
-          engaged with contemporary social issues.</p>
-        <p>The garments became canvases for dissent, each piece carrying messages of resistance, hope, and the
-          urgent need for change. This period marked a shift toward more explicitly political work, while
-          maintaining the designer's signature aesthetic of boldness and innovation.</p>
+  <!-- Wearable Resistance (Infinite Draggable Grid with Flip Cards) -->
+  <section class="wearable-section" id="wearableSection" aria-label="Wearable Resistance">
+    <div class="wearable-shell">
+      <h2 class="wearable-heading">Wearable Resistance</h2>
+      <div class="wearable-board" role="application" aria-label="Draggable grid of Walter quotes">
+        <div class="wearable-world" id="wearableWorld"></div>
       </div>
     </div>
   </section>

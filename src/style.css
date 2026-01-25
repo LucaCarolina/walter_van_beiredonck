@@ -1508,7 +1508,7 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
 /* Walter Layer - Same position as model */
 .aesth-walter {
     position: fixed;
-    top: 60%;
+    top: 58%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 4;
@@ -1625,13 +1625,13 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     display: block;
 }
 
-/* Chat Box - Speech bubble from right crowd */
+/* Chat Box - Speech bubble from RIGHT crowd */
 .aesth-chatbox {
     position: absolute;
-    top: -100px;
-    left: calc(50% + 200px);
-    transform: translateX(-50%) scaleX(-1) rotate(15deg);
-    /* Counter scaleX and rotate to cancel parent's scaleX(-1) and -15deg rotation */
+    top: -40px; /* 50px higher */
+    left: calc(35% + 50px); /* 50px closer to the right */
+    /* Crowd-right is rotated +15deg in GSAP; counter-rotate so text stays readable */
+    transform: translateX(-50%) rotate(-15deg);
     background-color: #2a2a2a;
     color: var(--color-white);
     padding: 18px 22px;
@@ -1640,6 +1640,8 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     font-family: 'Space Mono', monospace;
     font-size: 0.95rem;
     line-height: 1.6;
+    text-align: left;
+    white-space: normal;
     opacity: 0;
     z-index: 10;
     cursor: pointer;
@@ -1647,21 +1649,21 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
 }
 
 .aesth-chatbox.expanded {
-    width: 350px;
-    padding: 25px 28px;
-    min-height: 70px;
+    width: min(480px, calc(100vw - 40px));
+    padding: 25px 24px;
+    min-height: 80px;
 }
 
-/* Speech bubble tail pointing down-left */
+/* Speech bubble tail pointing down-right */
 .aesth-chatbox::after {
     content: '';
     position: absolute;
     bottom: -20px;
-    left: 20px;
+    right: 20px;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 20px 25px 0 0;
+    border-width: 20px 0 0 25px;
     border-color: #2a2a2a transparent transparent transparent;
 }
 
@@ -1873,6 +1875,140 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     overflow: hidden;
 }
 
+.truth-section {
+    background: #0b0b0b;
+    color: var(--color-white);
+    position: relative;
+}
+
+.truth-banner {
+    background: var(--color-red);
+    padding: 22px 40px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+}
+
+.truth-banner-title {
+    margin: 0;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 5.2rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-white);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+    line-height: 1;
+}
+
+.truth-stage {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 40px 64px;
+    min-height: min(78vh, 820px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.truth-era {
+    margin: 0;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.truth-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 28px;
+    align-items: end;
+    position: relative;
+}
+
+.truth-card {
+    background: rgba(0, 0, 0, 0.92);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+    padding: 34px 34px 30px;
+}
+
+.truth-title {
+    margin: 0 0 16px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-white);
+}
+
+.truth-body {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.98rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 62ch;
+}
+
+.truth-body p + p {
+    margin-top: 16px;
+}
+
+.truth-visual {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.truth-image {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.55));
+}
+
+.truth-mark {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    width: 150px;
+    height: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.55));
+}
+
+@media (max-width: 968px) {
+    .truth-stage {
+        padding: 22px 20px 54px;
+    }
+
+    .truth-banner {
+        padding: 18px 20px;
+    }
+
+    .truth-layout {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .truth-visual {
+        justify-content: center;
+    }
+
+    .truth-image {
+        max-width: 640px;
+    }
+
+    .truth-mark {
+        width: 120px;
+        left: 6px;
+        bottom: 6px;
+    }
+}
+
 .court-jester-bg {
     width: 100%;
     height: 100%;
@@ -1983,6 +2119,303 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     letter-spacing: 3px;
     text-align: center;
     color: var(--color-white);
+}
+
+/* ========================================
+   WEARABLE RESISTANCE – Infinite Draggable Grid
+   ======================================== */
+.wearable-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--color-black);
+    overflow: hidden;
+}
+
+.wearable-shell {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.wearable-heading {
+    position: relative;
+    z-index: 20;
+    margin: 0;
+    padding: 18px 40px;
+    background: #F7F5E9;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3.2rem);
+    font-style: italic;
+    letter-spacing: 2px;
+    text-transform: none;
+    color: var(--color-black);
+    text-align: center;
+    border-bottom: 2px solid var(--color-black);
+}
+
+.wearable-board {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.wearable-board.is-dragging {
+    cursor: grabbing;
+}
+
+.wearable-world {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2000px;
+    height: 1200px;
+}
+
+/* Flip card container */
+.wearable-item {
+    position: absolute;
+    perspective: 1000px;
+    cursor: pointer;
+    /* No CSS transitions - GSAP handles all animations */
+    transition: none !important;
+}
+
+.wearable-item-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* No CSS transition - GSAP handles all transform animations */
+    transform-style: preserve-3d;
+}
+
+/* Flip is handled by GSAP, not CSS - this is for z-index only */
+.wearable-item.is-flipped {
+    z-index: 20;
+}
+
+/* Hover state - card is enlarged */
+.wearable-item.is-hovered {
+    z-index: 10;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.wearable-item-front,
+.wearable-item-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border: 3px solid var(--color-black);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.wearable-item:hover .wearable-item-front,
+.wearable-item:hover .wearable-item-back {
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Front side (image) */
+.wearable-item-front {
+    background: #F7F5E9;
+}
+
+.wearable-item-front img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* Back side (quote) */
+.wearable-item-back {
+    transform: rotateY(180deg);
+    background: #F7F5E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 24px;
+    overflow: hidden;
+}
+
+.wearable-card-quote {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Opening quote mark */
+.wearable-card-quote::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: -6px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--color-red);
+    pointer-events: none;
+}
+
+/* Closing quote mark */
+.wearable-card-quote::after {
+    content: '"';
+    position: absolute;
+    bottom: 16px;
+    right: -2px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--color-red);
+    pointer-events: none;
+}
+
+.wearable-card-text {
+    margin: 0 0 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--color-black);
+    padding: 6px 0;
+    overflow: hidden;
+}
+
+.wearable-card-collection {
+    margin: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--color-black);
+    opacity: 0.7;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+/* Quote Modal Overlay */
+.wearable-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.wearable-modal[hidden] {
+    display: none;
+}
+
+.wearable-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.wearable-quote {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 640px;
+    background: #F7F5E9;
+    border: 3px solid var(--color-black);
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.3);
+    padding: 50px 44px 40px;
+}
+
+.wearable-quote-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: var(--color-black);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+
+.wearable-quote-close:hover {
+    opacity: 1;
+}
+
+.wearable-quote-inner {
+    position: relative;
+}
+
+/* Opening quote mark */
+.wearable-quote-inner::before {
+    content: '"';
+    position: absolute;
+    top: -36px;
+    left: -20px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 7rem;
+    line-height: 1;
+    color: var(--color-red);
+    pointer-events: none;
+}
+
+/* Closing quote mark */
+.wearable-quote-inner::after {
+    content: '"';
+    position: absolute;
+    bottom: 30px;
+    right: -10px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 7rem;
+    line-height: 1;
+    color: var(--color-red);
+    pointer-events: none;
+}
+
+.wearable-quote-text {
+    margin: 0 0 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    line-height: 1.7;
+    color: var(--color-black);
+}
+
+.wearable-quote-collection {
+    margin: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--color-black);
+    opacity: 0.75;
+}
+
+@media (max-width: 640px) {
+    .wearable-quote {
+        padding: 40px 28px 32px;
+    }
+
+    .wearable-quote-inner::before {
+        font-size: 5rem;
+        top: -28px;
+        left: -10px;
+    }
+
+    .wearable-quote-inner::after {
+        font-size: 5rem;
+        bottom: 20px;
+        right: 0;
+    }
 }
 
 /* Scroll-triggered animations */

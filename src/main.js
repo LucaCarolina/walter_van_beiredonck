@@ -10,6 +10,7 @@ window.$ = $
 import { initHeroDrag } from './heroDrag.js'
 import { initWltScroll } from './wltScroll.js'
 import { initAesthScroll, destroyAesthScroll } from './aesthScroll.js'
+import { initWearableGrid } from './wearableGrid.js'
 import './logger.js'
 
 // This file serves as the entry point for Vite
@@ -25,8 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // so we initialize it only when WLT unlocks. This avoids ScrollTrigger
     // measuring a `display:none` section and leaving stale pin-spacers.
     document.addEventListener('walter:wltUnlocked', () => {
-        window.walterLog?.('APP', 'wltUnlocked -> initAesthScroll')
+        window.walterLog?.('APP', 'wltUnlocked -> initAesthScroll, initWearableGrid')
         initAesthScroll()
+        // Delay wearable grid init slightly to ensure section is visible
+        setTimeout(() => initWearableGrid(), 100)
     })
     document.addEventListener('walter:wltLocked', () => {
         window.walterLog?.('APP', 'wltLocked -> destroyAesthScroll')
@@ -153,19 +156,19 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
-    // AESTHETICTERRORISTS chat box typing effect (on hover over crowd)
-    const aesthCrowdLeft = document.querySelector('.aesth-crowd-left')
+    // AESTHETICTERRORISTS chat box typing effect (on hover over RIGHT crowd)
+    const aesthCrowdRight = document.querySelector('.aesth-crowd-right')
     const aesthChatbox = document.getElementById('aesthChatbox')
     const aesthChatText = document.getElementById('aesthChatText')
     const aesthTypingIndicator = document.getElementById('aesthTypingIndicator')
 
-    if (aesthCrowdLeft && aesthChatbox && aesthChatText && aesthTypingIndicator) {
-        const fullText = "In a move that would have crushed a lesser artist, Walter lost his financial backing and was legally prohibited from using his own name on his creations. Most designers would have vanished into the archives, but Walter went underground. Stripped of his identity, he launched a ghost label"
+    if (aesthCrowdRight && aesthChatbox && aesthChatText && aesthTypingIndicator) {
+        const fullText = "In a move that would have crushed a lesser artist, Walter lost his financial backing and was legally prohibited from using his own name on his creations. Most designers would have vanished into the archives, but Walter went underground. Stripped of his identity, he launched a ghost label."
         let isTyping = false
         let typewriterTimeout = null
 
-        // Trigger on hover over the left crowd
-        aesthCrowdLeft.addEventListener('mouseenter', () => {
+        // Trigger on hover over the right crowd
+        aesthCrowdRight.addEventListener('mouseenter', () => {
             if (isTyping) return
 
             isTyping = true
@@ -193,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
 
         // Reset on mouse leave
-        aesthCrowdLeft.addEventListener('mouseleave', () => {
+        aesthCrowdRight.addEventListener('mouseleave', () => {
             isTyping = false
             if (typewriterTimeout) {
                 clearTimeout(typewriterTimeout)

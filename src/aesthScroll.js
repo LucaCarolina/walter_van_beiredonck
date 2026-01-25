@@ -67,7 +67,8 @@ export function initAesthScroll() {
     if (textOverlay) gsap.set(textOverlay, { opacity: 0 })
     if (model) gsap.set(model, { opacity: 0, top: '60%', left: '50%', xPercent: -50, yPercent: -50 })
     if (modelChatbox) gsap.set(modelChatbox, { opacity: 0 })
-    if (walter) gsap.set(walter, { opacity: 0, top: '60%', left: '50%', xPercent: -50, yPercent: -50 })
+    // Center Walter on screen (true center, not slightly low)
+    if (walter) gsap.set(walter, { opacity: 0, top: '50%', left: '58%', xPercent: -50, yPercent: -50 })
     if (walterChatbox) gsap.set(walterChatbox, { opacity: 0 })
 
     // Model typing animation function (auto-triggered)
