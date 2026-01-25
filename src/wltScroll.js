@@ -1,26 +1,24 @@
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import ScrollToPlugin from 'gsap/ScrollToPlugin'
+import { makeLogger } from './logger.js'
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
-// DEBUG LOGGING
-const DEBUG = true
-const log = (...args) => DEBUG && console.log('[WLT]', ...args)
+const log = makeLogger('WLT')
 const logState = (label, extras = {}) => {
-    if (!DEBUG) return
     const section = document.querySelector('.wlt-section')
     const track = document.querySelector('.wlt-track')
     const wrapper = document.querySelector('.termination-wrapper')
-    console.log(`[WLT] === ${label} ===`, {
+    log(`STATE:${label}`, {
         scrollY: window.scrollY,
-        sectionDisplay: section?.style.display,
-        sectionVisibility: section?.style.visibility,
-        sectionOpacity: section?.style.opacity,
+        sectionDisplay: section ? getComputedStyle(section).display : null,
+        sectionVisibility: section ? getComputedStyle(section).visibility : null,
+        sectionOpacity: section ? getComputedStyle(section).opacity : null,
         sectionClasses: section?.className,
-        trackX: track ? gsap.getProperty(track, 'x') : 'N/A',
-        wrapperDisplay: wrapper?.style.display,
-        wrapperVisibility: wrapper?.style.visibility,
+        trackX: track ? gsap.getProperty(track, 'x') : null,
+        wrapperDisplay: wrapper ? getComputedStyle(wrapper).display : null,
+        wrapperVisibility: wrapper ? getComputedStyle(wrapper).visibility : null,
         bodyClasses: document.body.className,
         ...extras
     })
@@ -32,7 +30,7 @@ export function initWltScroll() {
     const bgRows = document.querySelectorAll('.wlt-bg-text-row')
     if (!section || !track) return
 
-    log('initWltScroll started')
+    log('init:start')
 
     // Shared State
     let isCrushed = false
@@ -41,7 +39,7 @@ export function initWltScroll() {
     // PARTIAL reset - only restore termination card, keep track at end position
     // Used when scrolling back from AESTHETICTERRORISTS
     const resetTerminationOnly = () => {
-        log('resetTerminationOnly CALLED')
+        log('resetTerminationOnly:called')
         logState('BEFORE resetTerminationOnly', { isCrushed })
 
         const wrapper = document.querySelector('.termination-wrapper')
@@ -72,13 +70,14 @@ export function initWltScroll() {
 
         // Re-lock the scroll to hide sections after wlt
         document.body.classList.add('wlt-locked')
+        document.dispatchEvent(new CustomEvent('walter:wltLocked'))
 
         logState('AFTER resetTerminationOnly', { isCrushed })
     }
 
     // FULL reset - reset everything to beginning (used when scrolling back through entire section)
     const resetSystem = () => {
-        log('resetSystem CALLED (full reset)')
+        log('resetSystem:called (full reset)')
         logState('BEFORE resetSystem', { isCrushed })
 
         // First do the termination reset
@@ -131,20 +130,34 @@ export function initWltScroll() {
             invalidateOnRefresh: true,
             anticipatePin: 1,
             onEnter: () => {
-                log('ScrollTrigger onEnter')
+                log('ScrollTrigger:onEnter')
                 logState('onEnter', { isCrushed })
             },
             onLeave: () => {
-                log('ScrollTrigger onLeave')
+                log('ScrollTrigger:onLeave')
                 logState('onLeave', { isCrushed })
             },
             onLeaveBack: () => {
-                log('ScrollTrigger onLeaveBack')
+                log('ScrollTrigger:onLeaveBack')
                 logState('onLeaveBack', { isCrushed })
+            },
+            // Critical: if WLT is locked and not crushed, prevent leaving the pinned section.
+            // Otherwise you end up scrolling into "nothing" (next sections are display:none).
+            onUpdate: (self) => {
+                if (!isCrushed && document.body.classList.contains('wlt-locked')) {
+                    if (self.progress >= 0.999 && self.direction > 0) {
+                        // Clamp scroll position to stay inside the pin range.
+                        if (typeof self.scroll === 'function') {
+                            self.scroll(self.end - 2)
+                        } else {
+                            window.scrollTo({ top: self.end - 2, behavior: 'auto' })
+                        }
+                    }
+                }
             },
             // Reset when scrolling back up into the section from below
             onEnterBack: () => {
-                log('ScrollTrigger onEnterBack')
+                log('ScrollTrigger:onEnterBack')
                 const wrapper = document.querySelector('.termination-wrapper')
                 logState('onEnterBack START', {
                     isCrushed,
@@ -154,22 +167,24 @@ export function initWltScroll() {
 
                 // Only reset if it was crushed (wrapper is hidden)
                 if (isCrushed || (wrapper && wrapper.style.display === 'none')) {
-                    log('onEnterBack: Condition MET - calling resetTerminationOnly')
+                    log('onEnterBack:condition met -> resetTerminationOnly')
                     // Use partial reset - only restore termination card, keep track at end
                     resetTerminationOnly()
 
                     // HARDCODED SCROLL: Snap to the termination card (end of horizontal scroll)
                     const st = mainScrollTrigger
                     if (st) {
-                        const scrollTarget = st.end - 50
-                        log('onEnterBack: Scrolling to', scrollTarget, 'st.end:', st.end)
-                        window.scrollTo({ top: scrollTarget, behavior: 'instant' })
+                        // Leave a bit more room than -50px to avoid instantly "falling out" of the pin.
+                        const buffer = Math.min(200, Math.round(window.innerHeight * 0.25))
+                        const scrollTarget = st.end - buffer
+                        log('onEnterBack:scrollTo', { scrollTarget, stEnd: st.end, buffer })
+                        window.scrollTo({ top: scrollTarget, behavior: 'auto' })
                         gsap.set(track, { x: getScrollAmount() })
-                        log('onEnterBack: Track set to', getScrollAmount())
+                        log('onEnterBack:track forced', { x: getScrollAmount() })
                     }
                     logState('onEnterBack AFTER reset')
                 } else {
-                    log('onEnterBack: Condition NOT met - no reset needed')
+                    log('onEnterBack:condition not met -> no reset')
                 }
             }
         }
@@ -301,7 +316,7 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
     let scrollBackListener = null
 
     function setupScrollBackDetection() {
-        log('setupScrollBackDetection: Setting up listener')
+        log('setupScrollBackDetection:setup')
         lastScrollY = window.scrollY
 
         scrollBackListener = () => {
@@ -310,7 +325,7 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
 
             // If scrolling UP and we're in the "gap zone" (between st.end and where we landed)
             if (st && currentY < lastScrollY && currentY > st.end && currentY < st.end + window.innerHeight) {
-                log('scrollBackListener: GAP ZONE DETECTED!', {
+                log('scrollBackListener:GAP zone detected', {
                     currentY,
                     lastScrollY,
                     stEnd: st.end,
@@ -322,14 +337,15 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
                 scrollBackListener = null
 
                 // Reset termination only and snap
-                log('scrollBackListener: Calling resetTerminationOnly')
+                log('scrollBackListener:resetTerminationOnly')
                 resetTerminationOnly()
 
-                const scrollTarget = st.end - 50
-                log('scrollBackListener: Scrolling to', scrollTarget)
-                window.scrollTo({ top: scrollTarget, behavior: 'instant' })
+                const buffer = Math.min(200, Math.round(window.innerHeight * 0.25))
+                const scrollTarget = st.end - buffer
+                log('scrollBackListener:scrollTo', { scrollTarget, stEnd: st.end, buffer })
+                window.scrollTo({ top: scrollTarget, behavior: 'auto' })
                 gsap.set(track, { x: getScrollAmount() })
-                log('scrollBackListener: Track set to', getScrollAmount())
+                log('scrollBackListener:track forced', { x: getScrollAmount() })
                 logState('scrollBackListener COMPLETE')
             }
 
@@ -338,62 +354,89 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
 
         // Add listener after a short delay
         setTimeout(() => {
-            log('scrollBackListener: Now active')
+            log('scrollBackListener:active')
             window.addEventListener('scroll', scrollBackListener, { passive: true })
         }, 500)
     }
 
     function crushSystem() {
-        log('crushSystem CALLED')
+        log('crushSystem:called')
         logState('crushSystem START', { isCrushed: getIsCrushed() })
+
+        // Prevent any in-progress "hold" visuals from interfering.
+        gsap.killTweensOf(progressBar)
 
         setIsCrushed(true)
         wrapper.classList.add('crushed')
-        wltSection.classList.add('crushed')
 
-        // Hide termination UI immediately
-        gsap.set(wrapper, { display: 'none' })
-        gsap.set('.term-overlay', { opacity: 0 })
+        // Keep WLT's black background visible while the paper breaks.
+        // (We only add `.wlt-section.crushed` at the very end, right before switching.)
+        gsap.set(wrapper, { display: 'block', opacity: 1, visibility: 'visible' })
+        gsap.set('.term-overlay', { opacity: 1 })
 
-        // Unlock body to show following sections
-        document.body.classList.remove('wlt-locked')
-        log('crushSystem: Body unlocked')
+        // Break animation (then switch to next section).
+        const breakTl = gsap.timeline({
+            defaults: { ease: 'power3.inOut' },
+            onComplete: () => {
+                // Hide termination UI after break animation has played.
+                gsap.set(wrapper, { display: 'none' })
+                gsap.set('.term-overlay', { opacity: 0 })
 
-        // Make all sections after wlt visible (start at 0 opacity for fade)
-        const nextSection = wltSection.nextElementSibling
-        if (nextSection) {
-            log('crushSystem: Next section found:', nextSection.className)
-            // First section starts invisible, rest are instant
-            gsap.set(nextSection, { opacity: 0, visibility: 'visible', display: '' })
+                // Unlock body to show following sections
+                document.body.classList.remove('wlt-locked')
+                document.dispatchEvent(new CustomEvent('walter:wltUnlocked'))
+                log('crushSystem:body unlocked (post-break)')
 
-            let sibling = nextSection.nextElementSibling
-            while (sibling) {
-                gsap.set(sibling, { opacity: 1, visibility: 'visible', display: '' })
-                sibling = sibling.nextElementSibling
+                // Make all sections after wlt visible (start at 0 opacity for fade)
+                const nextSection = wltSection.nextElementSibling
+                if (nextSection) {
+                    log('crushSystem: Next section found:', nextSection.className)
+                    // First section starts invisible, rest are instant
+                    gsap.set(nextSection, { opacity: 0, visibility: 'visible', display: '' })
+
+                    let sibling = nextSection.nextElementSibling
+                    while (sibling) {
+                        gsap.set(sibling, { opacity: 1, visibility: 'visible', display: '' })
+                        sibling = sibling.nextElementSibling
+                    }
+                }
+
+                // Switch WLT to post-crush visuals (transparent bg) now that we are leaving it.
+                wltSection.classList.add('crushed')
+
+                // Jump past the ScrollTrigger end point
+                const st = getScrollTrigger()
+                const OFFSET = window.innerHeight - 100 // Slightly less than full viewport
+                const scrollTarget = st ? st.end + OFFSET : 5000
+
+                log('crushSystem:scrollTo', { scrollTarget, stEnd: st?.end, offset: OFFSET })
+                window.scrollTo({ top: scrollTarget, behavior: 'auto' })
+
+                // Refresh ScrollTrigger after the jump
+                log('crushSystem:ScrollTrigger.refresh()')
+                ScrollTrigger.refresh()
+
+                // Fade in the next section after switching
+                if (nextSection) {
+                    gsap.to(nextSection, { opacity: 1, duration: 1.2, ease: "power2.out" })
+                }
+
+                logState('crushSystem COMPLETE', { isCrushed: getIsCrushed() })
+
+                // Set up listener to detect scrolling back up
+                setupScrollBackDetection()
             }
-        }
+        })
 
-        // HARDCODED SCROLL: Jump past the ScrollTrigger end point
-        // After pin releases, wlt-section has ~100vh natural height, need to scroll past it
-        const st = getScrollTrigger()
-        const OFFSET = window.innerHeight - 100 // Slightly less than full viewport
-        const scrollTarget = st ? st.end + OFFSET : 5000
+        // Overlay fades as the break begins
+        breakTl.to('.term-overlay', { opacity: 0, duration: 0.25 }, 0)
 
-        log('crushSystem: Scrolling to', scrollTarget, 'st.end:', st?.end, 'OFFSET:', OFFSET)
-        window.scrollTo({ top: scrollTarget, behavior: 'instant' })
+        // Tear the three slices apart (visible animation)
+        breakTl.to(pieces.top, { y: -140, x: -40, rotation: -14, duration: 0.55 }, 0.05)
+        breakTl.to(pieces.mid, { y: 10, x: 0, rotation: 2, duration: 0.55 }, 0.08)
+        breakTl.to(pieces.bot, { y: 160, x: 45, rotation: 16, duration: 0.55 }, 0.06)
 
-        // Refresh ScrollTrigger after the jump
-        log('crushSystem: Refreshing ScrollTrigger')
-        ScrollTrigger.refresh()
-
-        // NOW fade in the section (after scroll has happened)
-        if (nextSection) {
-            gsap.to(nextSection, { opacity: 1, duration: 3, ease: "power2.out" })
-        }
-
-        logState('crushSystem COMPLETE', { isCrushed: getIsCrushed() })
-
-        // Set up listener to detect scrolling back up
-        setupScrollBackDetection()
+        // Fade the pieces out slightly after they separate
+        breakTl.to([pieces.top, pieces.mid, pieces.bot], { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.55)
     }
 }

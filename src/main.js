@@ -9,7 +9,8 @@ window.$ = $
 // Import interaction modules
 import { initHeroDrag } from './heroDrag.js'
 import { initWltScroll } from './wltScroll.js'
-import { initAesthScroll } from './aesthScroll.js'
+import { initAesthScroll, destroyAesthScroll } from './aesthScroll.js'
+import './logger.js'
 
 // This file serves as the entry point for Vite
 // All JavaScript functionality will be organized into separate modules
@@ -20,7 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize hero drag interaction
     initHeroDrag()
     initWltScroll()
-    initAesthScroll()
+    // AESTHETICTERRORISTS is hidden behind `.wlt-locked` initially,
+    // so we initialize it only when WLT unlocks. This avoids ScrollTrigger
+    // measuring a `display:none` section and leaving stale pin-spacers.
+    document.addEventListener('walter:wltUnlocked', () => {
+        window.walterLog?.('APP', 'wltUnlocked -> initAesthScroll')
+        initAesthScroll()
+    })
+    document.addEventListener('walter:wltLocked', () => {
+        window.walterLog?.('APP', 'wltLocked -> destroyAesthScroll')
+        destroyAesthScroll()
+    })
 
     const introSection = document.querySelector('#introClapperSection')
     const bandSection = document.querySelector('#bandTransition')
@@ -88,6 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateAll)
 
     console.log('Walter Van Beiredonck site initialized')
+    window.walterLog?.('APP', 'initialized', {
+        scrollY: window.scrollY,
+        bodyClasses: document.body.className
+    })
 
     // Puk Puk typing effect
     const chatBox = document.getElementById('pukPukChat')
