@@ -1,9 +1,27 @@
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import { makeLogger } from './logger.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const log = makeLogger('AESTH')
+
+let aesthTimeline = null
+let cleanupListeners = []
+
+function on(el, type, handler, options) {
+    if (!el) return
+    el.addEventListener(type, handler, options)
+    cleanupListeners.push(() => el.removeEventListener(type, handler, options))
+}
+
 export function initAesthScroll() {
+    if (aesthTimeline) {
+        log('init:skipped (already initialized)')
+        ScrollTrigger.refresh()
+        return
+    }
+
     const section = document.querySelector('.aesth-section')
     if (!section) return
 
@@ -24,17 +42,18 @@ export function initAesthScroll() {
     const walterChatText = section.querySelector('.walter-chat-text')
 
     if (!runway || !crowdLeft || !crowdRight || !protest) return
+    log('init:start', { sectionDisplay: getComputedStyle(section).display })
 
     // Model chat text content
     const modelChatMessage = "This period marked a fundamental shift in the Walter System. This wasn't just about fashion anymore; it was about the right to exist outside the corporate grid."
-    
+
     // Walter chat text content (you can customize this)
     const walterChatMessage = "Fashion is a weapon. Clothes are a statement. Every stitch is a rebellion against the mundane, a declaration that we refuse to be invisible."
-    
+
     // Track typing state for model
     let modelTypingStarted = false
     let modelTypingComplete = false
-    
+
     // Track typing state for walter
     let walterTypingStarted = false
     let walterTypingComplete = false
@@ -115,10 +134,10 @@ export function initAesthScroll() {
 
     // Click handlers for walter
     if (walter) {
-        walter.addEventListener('click', startWalterTyping)
+        on(walter, 'click', startWalterTyping)
     }
     if (walterChatbox) {
-        walterChatbox.addEventListener('click', (e) => {
+        on(walterChatbox, 'click', (e) => {
             e.stopPropagation()
             startWalterTyping()
         })
@@ -133,8 +152,13 @@ export function initAesthScroll() {
             pin: true,
             scrub: 1,
             anticipatePin: 1,
+            onEnter: (self) => log('ScrollTrigger:onEnter', { start: self.start, end: self.end }),
+            onLeave: () => log('ScrollTrigger:onLeave'),
+            onEnterBack: () => log('ScrollTrigger:onEnterBack'),
+            onLeaveBack: () => log('ScrollTrigger:onLeaveBack'),
         }
     })
+    aesthTimeline = tl
 
     // Phase 1: Runway fades in (0% - 15%)
     tl.to(runway, {
@@ -275,4 +299,36 @@ export function initAesthScroll() {
     }
 
     ScrollTrigger.refresh()
+    log('init:done', {
+        stStart: tl.scrollTrigger?.start,
+        stEnd: tl.scrollTrigger?.end
+    })
+}
+
+export function destroyAesthScroll() {
+    if (!aesthTimeline) return
+
+    log('destroy:start')
+    try {
+        cleanupListeners.forEach(fn => fn())
+    } finally {
+        cleanupListeners = []
+    }
+
+    // Kill timeline + its ScrollTrigger and revert pin changes if possible.
+    const st = aesthTimeline.scrollTrigger
+    if (st) st.kill(true)
+    aesthTimeline.kill()
+    aesthTimeline = null
+
+    // Safety: kill any remaining ScrollTriggers that reference elements in this section.
+    const section = document.querySelector('.aesth-section')
+    if (section) {
+        ScrollTrigger.getAll().forEach(t => {
+            if (t?.trigger && section.contains(t.trigger)) t.kill(true)
+        })
+    }
+
+    ScrollTrigger.refresh()
+    log('destroy:done')
 }
