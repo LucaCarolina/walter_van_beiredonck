@@ -116,7 +116,7 @@ export function initWltMobile() {
             // Create flip card structure for non-termination slides
             const flipInner = document.createElement('div')
             flipInner.className = 'wlt-flip-inner'
-            
+
             // Front side (image)
             const front = document.createElement('div')
             front.className = 'wlt-flip-front'
@@ -125,7 +125,7 @@ export function initWltMobile() {
             img.alt = alt || ''
             img.className = 'wlt-slide-image'
             front.appendChild(img)
-            
+
             // Back side (info)
             const back = document.createElement('div')
             back.className = 'wlt-flip-back'
@@ -147,7 +147,7 @@ export function initWltMobile() {
                 descEl.textContent = desc
                 back.appendChild(descEl)
             }
-            
+
             flipInner.appendChild(front)
             flipInner.appendChild(back)
             inner.appendChild(flipInner)
@@ -198,7 +198,7 @@ export function initWltMobile() {
         const wrapper = terminationCard.querySelector('.termination-wrapper')
         if (wrapper) {
             wrapper.classList.add('wlt-slide-termination')
-            
+
             // Create the slide with wrapper
             const terminationSlide = makeSlide({
                 title: 'IDENTITY TERMINATION',
@@ -207,13 +207,13 @@ export function initWltMobile() {
                 isTermination: true,
                 mountEl: wrapper
             })
-            
+
             // Move overlay OUTSIDE of slide-inner so it's not clipped
             // Do this AFTER the slide is created and added to DOM
             if (terminationSlide) {
                 const slideInner = terminationSlide.querySelector('.wlt-slide-inner')
                 const overlay = slideInner?.querySelector('.term-overlay')
-                
+
                 if (overlay && slideInner) {
                     // Remove overlay from wrapper
                     overlay.remove()
@@ -222,7 +222,7 @@ export function initWltMobile() {
                     overlay.classList.add('wlt-overlay-external')
                 }
             }
-            
+
             terminationCard.style.display = 'none'
         }
     }
@@ -261,7 +261,7 @@ export function initWltMobile() {
     const openDetails = (slide) => {
         // Don't open modal for termination slide
         if (slide.dataset.termination === '1') return
-        
+
         const title = slide.dataset.title || ''
         const subtitle = slide.dataset.subtitle || ''
         const desc = slide.dataset.desc || ''
@@ -375,41 +375,43 @@ export function initWltMobile() {
     // Calculate actual content height (including background rows and carousel)
     // Let the section be its natural height, but pin it until crushed
     const vh = window.innerHeight
-    
+
     // Don't force height - let it be natural based on content
-    // But ensure it's at least 100vh
-    section.style.minHeight = `${vh}px`
-    container.style.minHeight = `${vh}px`
+    // Reduced to 70vh to remove extra 30vh space on mobile (added back 10vh)
+    section.style.minHeight = `${vh * 0.7}px`
+    container.style.minHeight = `${vh * 0.7}px`
     container.style.overflow = 'hidden'
-    
+
     // Force a refresh to measure actual height
     ScrollTrigger.refresh()
-    
+
     // Get the actual scroll height needed (section's natural height)
     // Measure only the carousel, not including fixed overlay or extra space
     const carouselEl = container.querySelector('.wlt-carousel')
     let sectionHeight = vh // Default to viewport height
-    
+
     if (carouselEl) {
         // Force a layout recalculation
         ScrollTrigger.refresh()
-        
+
         // Measure carousel's actual content height (not including fixed overlay)
         // The overlay is position: fixed, so it doesn't affect layout
         const carouselRect = carouselEl.getBoundingClientRect()
         const sectionRect = section.getBoundingClientRect()
         const carouselBottom = carouselRect.bottom - sectionRect.top
-        
-        // Use carousel bottom exactly - no extra buffer
-        sectionHeight = Math.max(carouselBottom, vh)
+
+        // Use carousel bottom exactly - remove extra 30vh (added back 10vh)
+        // Reduce by 30vh to remove the extra space
+        sectionHeight = Math.max(carouselBottom - (vh * 0.3), vh * 0.7) // At least 70vh minimum
     } else {
-        sectionHeight = section.offsetHeight
+        sectionHeight = section.offsetHeight - (vh * 0.3) // Remove 30vh
     }
-    
-    // Don't add extra scroll distance - just pin for the exact content height
+
+    // Don't add extra scroll distance - just pin for the exact content height (minus 40vh)
     const scrollDistance = Math.max(sectionHeight - vh, 0) // Can be 0 if content fits in viewport
-    
+
     // Use pinSpacing: false to prevent extra space, but allow natural height
+    // Remove onUpdate to prevent jittery behavior - use simpler approach
     const st = ScrollTrigger.create({
         trigger: section,
         start: "top top",
@@ -419,27 +421,7 @@ export function initWltMobile() {
         scrub: false,
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onUpdate: (self) => {
-            // Prevent scrolling past if not crushed (same as desktop)
-            if (!isCrushed && document.body.classList.contains('wlt-locked')) {
-                if (self.progress >= 0.999 && self.direction > 0) {
-                    if (typeof self.scroll === 'function') {
-                        self.scroll(self.end - 2)
-                    } else {
-                        window.scrollTo({ top: self.end - 2, behavior: 'auto' })
-                    }
-                }
-            }
-            // Prevent scrolling back down if crushed but user is still in section
-            if (isCrushed && self.direction < 0 && self.progress < 0.5) {
-                // User trying to scroll back down - block it
-                if (typeof self.scroll === 'function') {
-                    self.scroll(self.end + 10)
-                } else {
-                    window.scrollTo({ top: self.end + 10, behavior: 'auto' })
-                }
-            }
-        },
+        // Removed onUpdate to prevent jittery jumping behavior on mobile
         onEnterBack: () => {
             log('ScrollTrigger:onEnterBack (mobile)')
             // When scrolling back up from next section, snap to termination slide
@@ -472,7 +454,7 @@ export function initWltMobile() {
     const terminationSlide = slideEls.find(s => s.dataset.termination === '1')
     const terminationWrapper = terminationSlide?.querySelector('.termination-wrapper')
     const externalOverlay = terminationSlide?.querySelector('.wlt-overlay-external')
-    
+
     if (terminationWrapper) {
         // Make sure overlay is visible and accessible
         if (externalOverlay) {
@@ -484,7 +466,7 @@ export function initWltMobile() {
                 progressFill.style.visibility = 'visible'
             }
         }
-        
+
         initTermination(
             resetTerminationOnly,
             () => isCrushed,
@@ -634,7 +616,7 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
 
                 log('crushSystem:scrollTo', { scrollTarget, stEnd: st?.end, offset: OFFSET })
                 window.scrollTo({ top: scrollTarget, behavior: 'auto' })
-                
+
                 // Set up listener to detect scrolling back up
                 setupScrollBackDetection()
 

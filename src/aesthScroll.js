@@ -59,16 +59,39 @@ export function initAesthScroll() {
     let walterTypingComplete = false
     let walterClickable = false
 
+    // Check if mobile
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches
+    const mobileYOffset = isMobile ? 80 : 0
+    
     // Set initial states with GSAP for proper transform handling
     // Left crowd: flipped horizontally, rotated to lean towards center
     gsap.set(crowdLeft, { scaleX: -1, rotation: -15, opacity: 0 })
     // Right crowd: rotated to lean towards center (mirroring left)
     gsap.set(crowdRight, { rotation: 15, opacity: 0 })
     if (textOverlay) gsap.set(textOverlay, { opacity: 0 })
-    if (model) gsap.set(model, { opacity: 0, top: '60%', left: '50%', xPercent: -50, yPercent: -50 })
+    // Model initial position - 150px lower on mobile using y offset
+    if (model) {
+        gsap.set(model, { 
+            opacity: 0, 
+            top: '60%', 
+            left: '50%', 
+            xPercent: -50, 
+            yPercent: -50,
+            y: mobileYOffset 
+        })
+    }
     if (modelChatbox) gsap.set(modelChatbox, { opacity: 0 })
-    // Center Walter on screen (true center, not slightly low)
-    if (walter) gsap.set(walter, { opacity: 0, top: '50%', left: '58%', xPercent: -50, yPercent: -50 })
+    // Walter initial position - 150px lower on mobile using y offset
+    if (walter) {
+        gsap.set(walter, { 
+            opacity: 0, 
+            top: '50%', 
+            left: '50%', 
+            xPercent: -50, 
+            yPercent: -50,
+            y: mobileYOffset 
+        })
+    }
     if (walterChatbox) gsap.set(walterChatbox, { opacity: 0 })
 
     // Model typing animation function (auto-triggered)
@@ -217,9 +240,11 @@ export function initAesthScroll() {
             ease: "power2.out"
         }, 3)
 
-        // Phase 6: Model moves down slightly on the runway
+        // Phase 6: Model moves down slightly on the runway (lower on mobile)
+        const modelStopY = isMobile ? mobileYOffset + 50 : 0
         tl.to(model, {
             top: '75%',
+            y: modelStopY,
             duration: 1,
             ease: "power2.inOut"
         }, 4)
@@ -247,9 +272,11 @@ export function initAesthScroll() {
             }, 8)
         }
 
-        // Phase 9: Model continues moving down and fades out
+        // Phase 9: Model continues moving down and fades out (lower on mobile)
+        const modelExitY = isMobile ? mobileYOffset + 100 : 0
         tl.to(model, {
             top: '130%',
+            y: modelExitY,
             duration: 1.5,
             ease: "power2.in"
         }, 8.5)
@@ -272,9 +299,11 @@ export function initAesthScroll() {
             ease: "power2.out"
         }, 10)
 
-        // Phase 11: Walter moves down slightly (like model)
+        // Phase 11: Walter moves down slightly (like model, lower on mobile)
+        const walterStopY = isMobile ? mobileYOffset + 50 : 0
         tl.to(walter, {
             top: '75%',
+            y: walterStopY,
             duration: 1,
             ease: "power2.inOut"
         }, 11)

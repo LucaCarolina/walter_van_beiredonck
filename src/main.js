@@ -44,6 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
+    // Wearable section black button - smooth scroll to next section (mobile only)
+    const wearableSectionBtn = document.querySelector('.wearable-section-btn')
+    const wearableSection = document.querySelector('#wearableSection')
+
+    if (wearableSectionBtn && wearableSection) {
+        wearableSectionBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            const nextSection = wearableSection.nextElementSibling
+            if (nextSection) {
+                nextSection.scrollIntoView({ behavior: 'smooth' })
+            }
+        })
+    }
+
     document.addEventListener('walter:wltUnlocked', () => {
         window.walterLog?.('APP', 'wltUnlocked -> initAesthScroll, initWearableGrid')
         initAesthScroll()
