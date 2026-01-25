@@ -144,26 +144,47 @@ An interactive fashion designer portfolio website for Walter Van Beirendonck, bu
   - Increased scroll distance gives users more time to read each ribbon
 
 ### 5. W.&L.T. Horizontal Scroll Section (#wltSection)
-- **Status**: ✅ Mobile uses carousel (desktop remains pinned horizontal scroll)
+- **Status**: ✅ Mobile Responsive (COMPLETE)
 - **Desktop**: GSAP ScrollTrigger pinned horizontal scroll
 - **Mobile (≤768px)**: Carousel of all cards; non-focused cards are blurred; tap a card once to focus, tap again to open “read more” modal
 - Parallax "1990s" text background
 - 6 flip cards with collection info (`wlt-1.png` through `wlt-6.png`)
 - "Hold to Crush" termination card with progress bar
 - Custom events: `walter:wltUnlocked` and `walter:wltLocked`
-- **Note**: Has some mobile card size adjustments (240×360px on ≤768px) but full responsive layout needed
+- **Mobile Implementation**:
+  - Carousel centered in section with `margin-top: 100px`
+  - Navigation arrows centered within circular buttons using flexbox
+  - Card sizing: 240×360px on ≤768px
+  - Full-width carousel with proper spacing
 
 ### 6. Aestheticterrorists Section (#aesthSection)
-- **Status**: ⚠️ Needs Mobile Responsiveness
+- **Status**: ✅ Mobile Responsive (COMPLETE)
 - Pinned scroll animation with layered elements
 - Layers: runway, crowd (left/right), protest banner, model, walter
 - Chat boxes with typing effects
 - Images: `runway.png`, `crowd.png`, `protest1.png`, `model.png`, `walter.png`
+- **Mobile Implementation (≤768px)**:
+  - **Runway**: 300% width (3x larger), centered
+  - **Protest Banner**: 600% width (3x larger), positioned at top
+  - **Title Structure**: 
+    - Era label "2000 - 2002" above title (12px font)
+    - Title: "AESTHETIC <br> TERRORISTS" with working glitch effect
+    - Subtitle "The 'Rebel' becomes a 'Resister'" positioned lower
+  - **Model & Walter**: 
+    - Centered on x-axis using flexbox
+    - Positioned 80px lower than desktop (using GSAP `y` offset)
+    - Stop positions and exit positions also adjusted lower for mobile
+  - **Chat Boxes**: 
+    - Centered on both x and y axes
+    - Positioned 150px above center (margin-top: -320px)
+    - Width: 340px (max-width), narrower padding
+    - No triangle pointers on mobile
+    - Text centered within boxes
 
 ### 7. Truth Section (#truthSection)
-- **Status**: ✅ Updated Design
+- **Status**: ✅ Mobile Responsive (COMPLETE)
 - Red banner header "Rebellion Through Truth"
-- **Layout**: Full viewport section (100vh × 100vw)
+- **Desktop Layout**: Full viewport section (100vh × 100vw)
 - **Image**: `walter-truth-jester.png` positioned as element (not background)
   - Uses `object-fit: contain` to fit width without cropping
   - Centered vertically with `top: 50%` and `transform: translateY(-50%)`
@@ -177,12 +198,21 @@ An interactive fashion designer portfolio website for Walter Van Beirendonck, bu
 - **Decorative Mark**: `mark.png` positioned above text box
   - Position: `left: 25px, bottom: calc(164px + 430px)`
   - Contains both exclamation marks in single image
-- **Note**: Mobile responsiveness may need refinement
+- **Mobile Implementation (≤768px)**:
+  - **Banner Title**: 35px font-size, centered
+  - **Image**: 782px width, right edge aligned to device edge, z-index: 0 (behind text)
+  - **Layout Structure**:
+    - Title "THE COURT JESTER": 150px from top, left-aligned, white with shadow
+    - First paragraph: Left-aligned, overlays image with semi-transparent dark background (rgba(0, 0, 0, 0.4)), positioned 40px below title
+    - Second paragraph: In cream box (#F7F5E9), centered, full width, positioned 180px below first paragraph
+  - **Mark.png**: Positioned next to second paragraph box
+  - Text in second paragraph box is centered
 
 ### 8. Wearable Resistance Section (#wearableSection)
-- **Status**: ✅ Updated Design
+- **Status**: ✅ Mobile Responsive (COMPLETE)
 - **Canvas Styling**:
-  - 30px black border around draggable canvas
+  - 30px black border around draggable canvas (desktop)
+  - 15px black border on mobile (≤768px)
   - Background color: #F7F5E9 (cream)
   - Box-sizing: border-box to include border in sizing
 - **Title**: "Wearable Resistance"
@@ -193,9 +223,26 @@ An interactive fashion designer portfolio website for Walter Van Beirendonck, bu
   - Background: #F7F5E9 (cream) for both front and back
 - Infinite draggable canvas with 7 flip cards
 - macOS Dock-style proximity effect
-- Card sizing: base 220×290, hover 340×450
-- Size variations: 0.7x to 1.15x
-- **Note**: Mobile responsiveness may need refinement
+- **Desktop Card Sizing**: base 220×290px, hover 340×450px
+- **Mobile Card Sizing** (≤768px):
+  - Base: 110×145px (50% of desktop)
+  - Hover/Full: 170×225px (50% of desktop)
+  - Flipped: 65% of viewport (60-70% range)
+- Size variations: 0.7x to 1.15x (applied to base sizes)
+- **Mobile Features**:
+  - Touch drag and tap support
+  - Tap to flip cards (distinguishes tap from drag)
+  - Cards center in viewport when flipped on mobile
+  - Cards return to original position when flipped back
+  - Improved overlap detection to prevent card collisions
+  - Text properly parsed and displayed using textContent
+  - Font sizes scale proportionally (0.75rem text, 0.65rem collection on mobile)
+- **Scroll Down Button** (Mobile Only):
+  - Full-width red button overlay at bottom of canvas
+  - Text: "CLICK TO SCROLL" in bold black text
+  - Positioned absolutely at bottom of `.wearable-board`
+  - Smooth scrolls to next section (walterfy-section) on click
+  - Z-index: 100 to appear above canvas content
 
 ### 9. Walter-fy Your Voice Section (#walterfySection)
 - **Status**: ⚠️ Needs Mobile Responsiveness
@@ -312,14 +359,46 @@ document.addEventListener('walter:wltUnlocked', () => {
 - **Positioning**: Ribbons closer together (14% gaps vs 15-17%)
 - **Animation Speed**: Slower scroll (320vh mobile, 350vh small phones) for better readability
 
+#### 5. W.&L.T. Horizontal Scroll Section
+- **Carousel**: Centered in section with 100px top margin
+- **Arrows**: Centered within circular buttons using flexbox
+- **Card Sizing**: 240×360px on mobile
+
+#### 6. Aestheticterrorists Section
+- **Runway**: 300% width (3x larger) on mobile
+- **Protest Banner**: 600% width (3x larger) on mobile
+- **Title Structure**: Era label (2000-2002) above title, multi-line title with glitch effect
+- **Model & Walter**: Centered on x-axis, positioned 80px lower, chat boxes centered and resized
+- **Chat Boxes**: 340px max-width, centered, no triangle pointers, text centered
+
+#### 7. Truth Section
+- **Banner**: 35px font-size, centered
+- **Image**: 782px width, right-aligned to device edge, behind text (z-index: 0)
+- **Layout**: Two-paragraph structure - first overlays image (left-aligned), second in centered cream box below
+- **Mark.png**: Positioned next to second paragraph box
+
+#### 5. W.&L.T. Horizontal Scroll Section
+- **Carousel**: Centered in section with 100px top margin
+- **Arrows**: Centered within circular buttons using flexbox
+- **Card Sizing**: 240×360px on mobile
+
+#### 6. Aestheticterrorists Section
+- **Runway**: 300% width (3x larger) on mobile
+- **Protest Banner**: 600% width (3x larger) on mobile
+- **Title Structure**: Era label (2000-2002) above title, multi-line title with glitch effect
+- **Model & Walter**: Centered on x-axis, positioned 80px lower, chat boxes centered and resized
+- **Chat Boxes**: 340px max-width, centered, no triangle pointers, text centered
+
+#### 7. Truth Section
+- **Banner**: 35px font-size, centered
+- **Image**: 782px width, right-aligned to device edge, behind text (z-index: 0)
+- **Layout**: Two-paragraph structure - first overlays image (left-aligned), second in centered cream box below
+- **Mark.png**: Positioned next to second paragraph box
+
 ### ⚠️ Sections Still Needing Mobile Responsiveness
 
-1. **W.&L.T. Horizontal Scroll Section** - Horizontal scroll needs mobile adaptation
-2. **Aestheticterrorists Section** - Complex layered animations need mobile optimization
-3. **Truth Section** - Full viewport layout may need mobile adjustments
-4. **Wearable Resistance Section** - Draggable grid needs touch optimization
-5. **Walter-fy Your Voice Section** - Layout may need refinement
-6. **CTA / Footer Section** - Animated text lines may need mobile sizing adjustments
+1. **Walter-fy Your Voice Section** - Layout may need refinement
+2. **CTA / Footer Section** - Animated text lines may need mobile sizing adjustments
 
 ## Mobile Breakpoints Used
 - **768px**: Tablets and large phones (primary mobile breakpoint)
@@ -343,6 +422,11 @@ document.addEventListener('walter:wltUnlocked', () => {
 - Hero drag uses native touch events with `{ passive: false }`
 - Proper bounds calculation for `object-fit: contain` images
 - Orientation change support
+- **Wearable Grid Mobile**:
+  - Touch drag support with velocity tracking
+  - Tap-to-flip with drag detection (15px threshold)
+  - Prevents board drag when touching cards
+  - Touch events properly stop propagation
 
 ### Animation Timing Adjustments
 - Intro section text animation delayed to 55% progress (from 10%) for better visibility
@@ -360,6 +444,10 @@ document.addEventListener('walter:wltUnlocked', () => {
   - Plan Your Visit section (dark theme with red CTA)
   - MoMu Signup section (cream background with large logo, email signup)
   - Footer section (contact information, vertically centered)
+- **Mobile Improvements**:
+  - **Wearable Section**: Full mobile responsiveness with scaled card sizes, touch interactions, flip animations, and scroll down button
+  - **W.&L.T. Section**: Fixed jittery scrolling, reduced section height by 30vh
+  - **Truth Section**: Improved mobile layout with centered text box and mark positioning
 
 ## Dev Server
 - Running at `http://localhost:5174/`
@@ -367,22 +455,19 @@ document.addEventListener('walter:wltUnlocked', () => {
 
 ## Git Status
 - **Branch**: dev (tracking origin/dev)
-- **Modified**: `index.html`, `src/style.css`, `src/main.js`
+- **Modified**: `index.html`, `src/style.css`, `src/main.js`, `src/wearableGrid.js`, `src/wltMobile.js`
 - **Recent Changes**:
-  - Truth section: Full viewport layout, image positioning, text card overlay
-  - Wearable section: Canvas border and background styling, title positioning
+  - Truth section: Full viewport layout, image positioning, text card overlay, mobile improvements
+  - Wearable section: Full mobile responsiveness, card scaling, touch interactions, flip animations, scroll down button
+  - W.&L.T. section: Fixed jittery scrolling on mobile, reduced section height by 30vh
   - CTA section: Restructured with animated text and static side images
   - Added three new sections: Plan Your Visit, MoMu Signup, Footer
 - **Untracked**: `public/photos/truth-glitch.png`, `public/photos/].png`
 
 ## Next Steps for Full Mobile Responsiveness
 
-1. **W.&L.T. Section**: Convert horizontal scroll to vertical stacking or touch-optimized horizontal scroll
-2. **Aestheticterrorists**: Optimize layer animations for mobile viewport
-3. **Truth Section**: Stack columns vertically on mobile
-4. **Wearable Grid**: Optimize touch interactions and card sizing for mobile
-5. **Walter-fy Section**: Refine text box positioning and sizing
-6. **CTA/Footer**: Stack columns and adjust text sizes
+1. **Walter-fy Section**: Refine text box positioning and sizing
+2. **CTA/Footer**: Stack columns and adjust text sizes
 
 ## File Locations for Key Styles
 
@@ -390,7 +475,8 @@ document.addEventListener('walter:wltUnlocked', () => {
 - **Intro Clapperboard Mobile**: `src/style.css` lines ~2858-2962
 - **Band Transition Mobile**: `src/style.css` lines ~2925-2995
 - **Truth Section**: `src/style.css` lines ~2367-2479 (banner, layout, image, card, mark)
-- **Wearable Section**: `src/style.css` lines ~2630-2758 (section, canvas, cards)
+- **Wearable Section**: `src/style.css` lines ~3051-3130 (section, canvas, cards, mobile scroll button)
+- **Wearable Grid Module**: `src/wearableGrid.js` (mobile detection, card sizing, touch interactions, scroll button)
 - **CTA Section**: `src/style.css` lines ~2558-2758 (text styling, images, animations)
 - **Plan Your Visit Section**: `src/style.css` lines ~3900-3970
 - **MoMu Signup Section**: `src/style.css` lines ~3971-4055

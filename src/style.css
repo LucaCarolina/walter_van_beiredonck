@@ -1015,7 +1015,7 @@ body {
         position: relative;
         z-index: 10;
         /* Above background (z-index: 0) but below overlay (z-index: 10000) */
-        margin-top: 0;
+        margin-top: 100px;
     }
 
     .wlt-carousel-viewport {
@@ -1512,16 +1512,20 @@ body.wlt-modal-open {
         width: max-content;
     }
 
-    /* Ensure section height matches content (last row of 1990s) */
+    /* Ensure section height matches content (last row of 1990s) - remove extra 30vh (added back 10vh) */
     .wlt-section {
         height: auto !important;
-        min-height: 100vh;
+        min-height: 70vh !important;
+        /* Reduced from 100vh to remove extra space */
         max-height: none;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
     }
 
     .wlt-container {
         height: auto !important;
-        min-height: 100vh;
+        min-height: 70vh !important;
+        /* Reduced from 100vh */
         max-height: none;
     }
 }
@@ -1810,6 +1814,21 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     object-position: bottom center;
 }
 
+/* Mobile: Make runway even bigger and keep it centered */
+@media (max-width: 768px) {
+    .aesth-runway {
+        width: 300%;
+        max-width: 300%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .aesth-runway img {
+        width: 100%;
+        max-height: 100%;
+    }
+}
+
 /* Crowd Layers - Bottom corners */
 .aesth-crowd {
     position: absolute;
@@ -1859,6 +1878,101 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     display: block;
 }
 
+/* Mobile: Make protest banner even bigger */
+@media (max-width: 768px) {
+    .aesth-protest {
+        width: 600%;
+        /* Much larger for mobile */
+    }
+
+    .aesth-protest img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Center model and resize chat bubble for mobile */
+    .aesth-model {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .aesth-model img {
+        max-height: 50vh;
+        width: auto;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .model-chatbox {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: calc(100vw - 40px);
+        max-width: 340px;
+        padding: 14px 18px;
+        font-size: 0.85rem;
+        min-height: 60px;
+        margin-top: -320px;
+        margin-left: 0 !important;
+        right: auto !important;
+    }
+
+    .model-chatbox::before {
+        display: none !important;
+    }
+
+    .model-chatbox::after {
+        display: none !important;
+    }
+
+    /* Center Walter and resize chat bubble for mobile */
+    .aesth-walter {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .aesth-walter img {
+        max-height: 45vh;
+        width: auto;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .walter-chatbox {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: calc(100vw - 40px);
+        max-width: 340px;
+        padding: 14px 18px;
+        font-size: 0.85rem;
+        min-height: 60px;
+        margin-top: -320px;
+        margin-left: 0 !important;
+        right: auto !important;
+    }
+
+    .walter-chatbox::before {
+        display: none !important;
+    }
+
+    .walter-chatbox::after {
+        display: none !important;
+    }
+}
+
 /* Text Overlay on Protest Banner */
 .aesth-text-overlay {
     position: absolute;
@@ -1869,6 +1983,16 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     z-index: 4;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.aesth-era {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--color-white);
+    text-shadow: 2px 2px 0 var(--color-black);
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0;
 }
 
 .aesth-title {
@@ -1884,6 +2008,21 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
         1px -1px 0 var(--color-black),
         -1px 1px 0 var(--color-black);
     margin-bottom: 5px;
+    white-space: normal;
+    line-height: 1.2;
+}
+
+/* Fix glitch effect for multi-line aesth-title */
+.aesth-title.glitch {
+    display: inline-block;
+}
+
+.aesth-title.glitch::before,
+.aesth-title.glitch::after {
+    white-space: normal;
+    line-height: 1.2;
+    display: block;
+    clip: rect(0, 9999px, 200px, 0);
 }
 
 .aesth-subtitle {
@@ -1892,7 +2031,7 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     color: var(--color-white);
     text-shadow: 2px 2px 0 var(--color-black);
     font-weight: bold;
-    margin-top: -25px;
+    margin-top: 15px;
 }
 
 /* Model Layer - Center of screen */
@@ -2532,6 +2671,145 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     }
 }
 
+/* Mobile: Restructure text layout in Rebellion Through Truth section */
+@media (max-width: 768px) {
+    .truth-banner {
+        text-align: center;
+    }
+
+    .truth-banner-title {
+        text-align: center;
+        font-size: 35px;
+    }
+
+    /* Use image element with lower z-index so it sits behind text */
+    .truth-image {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: auto;
+        width: 782px;
+        height: auto;
+        max-height: 140vh;
+        object-fit: contain;
+        object-position: right center;
+        z-index: 0;
+    }
+
+    /* Set truth-layout as container */
+    .truth-layout {
+        position: relative;
+        min-height: 60vh;
+        padding: 20px;
+    }
+
+    .truth-card {
+        text-align: left;
+        position: relative;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        z-index: 2;
+        width: 100%;
+    }
+
+    .truth-body {
+        width: 100%;
+    }
+
+    .truth-title {
+        text-align: left;
+        margin-bottom: 20px;
+        margin-top: 150px;
+        color: var(--color-white);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .truth-body {
+        text-align: left;
+        margin: 0;
+    }
+
+    /* First paragraph - overlay on image, left aligned */
+    .truth-body>p:first-of-type,
+    .truth-paragraph-first {
+        text-align: left;
+        margin-bottom: 0;
+        margin-top: 40px;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 4px;
+        color: var(--color-white);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        position: relative;
+        z-index: 3;
+    }
+
+    /* Second paragraph - in box below the image */
+    .truth-body>p:last-of-type {
+        background: #F7F5E9;
+        padding: 20px;
+        margin: 180px 35px 0 auto;
+        position: relative;
+        border-radius: 4px;
+        color: var(--color-black);
+        z-index: 3;
+        max-width: 600px;
+        width: calc(100% - 40px);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    /* Ensure text inside is centered */
+    .truth-body>p:last-of-type p {
+        text-align: center;
+    }
+
+    /* Second paragraph box - separate box below */
+    .truth-paragraph-box {
+        background: #F7F5E9;
+        padding: 20px;
+        margin: 180px 35px 0 auto;
+        position: relative;
+        border-radius: 4px;
+        z-index: 3;
+        max-width: 600px;
+        width: calc(100% - 40px);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .truth-paragraph-second {
+        color: var(--color-black);
+        margin: 0;
+        text-align: center;
+    }
+
+    .truth-body>p:last-of-type {
+        margin-bottom: 0;
+    }
+
+    /* Position mark relative to truth-card, aligned with second paragraph */
+    .truth-mark {
+        position: absolute;
+        left: calc(50% + 250px);
+        bottom: 20px;
+        width: 80px;
+        height: auto;
+        z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+        .truth-mark {
+            left: 15px;
+            right: auto;
+            bottom: 20px;
+        }
+    }
+}
+
 .court-jester-bg {
     width: 100%;
     height: 100%;
@@ -2674,7 +2952,7 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     margin: -5px 0;
 }
 
-/* Text lines */
+/* Text lines - desktop */
 .cta-line {
     margin: 0;
     font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
@@ -2685,6 +2963,48 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     letter-spacing: 2px;
     line-height: 1.2;
     color: var(--color-black);
+}
+
+/* New structure - desktop styles */
+.cta-heading-wrapper {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cta-heading-line-1,
+.cta-heading-line-2 {
+    margin: 0;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(24px, 3.5vw, 48px);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.2;
+}
+
+.cta-heading-line-1 {
+    margin-bottom: 5px;
+}
+
+.cta-paragraph-wrapper {
+    text-align: center;
+    width: 100%;
+}
+
+.cta-paragraph {
+    margin: 0;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: clamp(24px, 3.5vw, 48px);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.2;
+    color: var(--color-black);
+}
+
+/* Hide old line structure */
+.cta-line-wrapper {
+    display: none;
 }
 
 .cta-red-text {
@@ -2701,7 +3021,7 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     .cta-media-wrapper {
         padding: 80px;
     }
-    
+
     .cta-media-item.person {
         width: 250px;
     }
@@ -2715,7 +3035,7 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     .cta-media-wrapper {
         padding: 60px;
     }
-    
+
     .cta-media-item.person {
         width: 220px;
     }
@@ -2731,13 +3051,21 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
 
 @media (max-width: 768px) {
     .cta-section {
-        padding: 80px 20px;
-        min-height: auto;
+        padding: 100px 20px calc(100px - 40vh) 20px;
+        min-height: 120vh;
         overflow: visible;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin-bottom: -40vh;
     }
-    
+
     .cta-media-wrapper {
         padding: 50px 30px;
+        /* Create space below images layout to prevent text overlap */
+        margin-bottom: 120px;
+        /* Ensure images stay in their layer */
+        z-index: 1;
     }
 
     .cta-media-item.person {
@@ -2751,13 +3079,98 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     .cta-line {
         font-size: clamp(20px, 6vw, 32px);
     }
+
+    /* Mobile text layout - positioned around images, not overlaying */
+    .cta-text-large {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        z-index: 30;
+        /* Ensure text flows naturally in document flow */
+        pointer-events: none;
+    }
+
+    /* Hide old line structure on mobile */
+    .cta-line-wrapper {
+        display: none;
+    }
+
+    /* Show new structure on mobile */
+    .cta-heading-wrapper,
+    .cta-paragraph-wrapper {
+        display: block;
+        pointer-events: auto;
+    }
+
+    .cta-heading-line-1,
+    .cta-heading-line-2,
+    .cta-paragraph {
+        display: block;
+    }
+
+    /* Top heading - "A new era" / "is here." - Above images with 60px space */
+    .cta-heading-wrapper {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 60px;
+        order: 1;
+        margin-top: -60px;
+    }
+
+    .cta-heading-line-1,
+    .cta-heading-line-2 {
+        margin: 0;
+        font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+        font-size: clamp(28px, 8vw, 48px);
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        line-height: 1.2;
+    }
+
+    .cta-heading-line-1 {
+        margin-bottom: 5px;
+    }
+
+    /* Paragraph text - positioned below images with blank space, full width */
+    .cta-paragraph-wrapper {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0 20px;
+        text-align: center;
+        order: 3;
+        /* Position below images layout with blank space to avoid overlap */
+        margin-top: 90px;
+        margin-bottom: 0;
+        box-sizing: border-box;
+        /* Ensure it's below images in z-index */
+        position: relative;
+        z-index: 20;
+    }
+
+    .cta-paragraph {
+        margin: 0;
+        font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: capitalize;
+        letter-spacing: 2px;
+        line-height: 1.3;
+        color: var(--color-black);
+        width: 100%;
+        /* Ensure text doesn't wrap in a way that causes overlap */
+        word-wrap: break-word;
+    }
 }
 
 @media (max-width: 480px) {
     .cta-media-wrapper {
         padding: 40px 20px;
     }
-    
+
     .cta-media-item.person {
         width: 140px;
     }
@@ -2817,8 +3230,125 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+    .wearable-board {
+        border: 15px solid var(--color-black);
+    }
+
+    .wearable-heading {
+        padding: 14px 20px;
+    }
+
+    /* Scroll down button - mobile only - overlay at bottom of canvas */
+    .wearable-scroll-down-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background-color: var(--color-red);
+        border: none;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        transition: opacity 0.2s ease;
+        font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+        font-size: clamp(1rem, 4vw, 1.5rem);
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--color-black);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .wearable-scroll-down-btn:hover,
+    .wearable-scroll-down-btn:active {
+        opacity: 0.9;
+    }
+
+    /* Mobile: Better padding for flipped cards */
+    .wearable-item-back {
+        padding: 20px 18px;
+    }
+
+    /* Mobile: Ensure text fits well in flipped cards */
+    .wearable-card-quote {
+        padding: 0;
+    }
+
+    .wearable-card-text {
+        font-size: 0.75rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 12px;
+        padding: 0;
+    }
+
+    .wearable-card-collection {
+        font-size: 0.65rem !important;
+        margin-top: auto;
+    }
+
+    /* Mobile: Adjust quote marks for smaller cards */
+    .wearable-card-quote::before {
+        font-size: 2.5rem;
+        top: -6px;
+        left: -4px;
+    }
+
+    .wearable-card-quote::after {
+        font-size: 2.5rem;
+        bottom: 12px;
+        right: -2px;
+    }
+
+    /* Black button at bottom of wearable section - mobile only */
+    .wearable-section-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background-color: var(--color-black);
+        border: none;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        transition: opacity 0.2s ease;
+        font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+        font-size: clamp(1rem, 4vw, 1.5rem);
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--color-white);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .wearable-section-btn:hover,
+    .wearable-section-btn:active {
+        opacity: 0.9;
+    }
+}
+
 .wearable-board.is-dragging {
     cursor: grabbing;
+}
+
+/* Hide scroll down button on desktop */
+.wearable-scroll-down-btn {
+    display: none;
+}
+
+/* Hide wearable section button on desktop */
+.wearable-section-btn {
+    display: none;
 }
 
 .wearable-world {
@@ -3082,6 +3612,7 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-top: -37vh;
 }
 
 .walterfy-stage {
@@ -3104,6 +3635,11 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     object-fit: contain;
     object-position: left top;
     z-index: 1;
+}
+
+/* Mobile image - hidden on desktop */
+.walterfy-image-mobile {
+    display: none;
 }
 
 /* Text box - solid black background */
@@ -3165,23 +3701,54 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
         padding: 0;
     }
 
+    /* Hide desktop image on mobile */
     .walterfy-image {
+        display: none;
+    }
+
+    /* Show and style mobile image - twice bigger (100%) and aligned to left edge */
+    .walterfy-image-mobile {
+        display: block;
         position: relative;
+        width: 100%;
         height: auto;
         object-fit: contain;
-        object-position: center;
+        object-position: left;
+        margin: -50px 0 0 0;
+        left: 0;
     }
 
     .walterfy-textbox {
         position: relative;
-        top: auto;
+        top: -370px;
+        left: 80px;
         right: auto;
         transform: none;
-        max-width: 100%;
+        max-width: calc(99% - 140px);
+        background-color: transparent;
+        padding: 0;
+        text-align: left;
+    }
+
+    /* Change white text to black on mobile and set font size to 13px */
+    .walterfy-headline {
+        font-size: 13px;
+    }
+
+    .walterfy-quote {
+        color: var(--color-black);
+        font-size: 13px;
+    }
+
+    .walterfy-cta {
+        color: var(--color-black);
+        font-size: 13px;
     }
 
     .walterfy-footer {
         height: 40px;
+        margin-top: -300px;
+        position: relative;
     }
 }
 
@@ -3908,6 +4475,7 @@ body::before {
     padding: 80px 40px;
     text-align: center;
     min-height: 60vh;
+    margin-top: 40vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4103,9 +4671,11 @@ body::before {
     margin: 0 auto;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     gap: 40px;
+    flex-direction: column;
+    text-align: center;
 }
 
 .footer-left {
@@ -4124,7 +4694,7 @@ body::before {
 
 .footer-right {
     flex: 1;
-    text-align: right;
+    text-align: center;
     font-family: 'Space Mono', monospace;
     font-size: clamp(0.9rem, 1.2vw, 1rem);
     line-height: 1.8;
@@ -4170,7 +4740,7 @@ body::before {
     }
 
     .footer-right {
-        text-align: left;
+        text-align: center;
     }
 
     .signup-logo {
