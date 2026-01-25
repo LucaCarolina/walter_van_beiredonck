@@ -3612,7 +3612,6 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin-top: -37vh;
 }
 
 .walterfy-stage {
@@ -3695,6 +3694,10 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
 }
 
 @media (max-width: 768px) {
+    .walterfy-section {
+        margin-top: -37vh;
+    }
+
     .walterfy-stage {
         flex-direction: column;
         min-height: auto;
@@ -4671,11 +4674,9 @@ body::before {
     margin: 0 auto;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 40px;
-    flex-direction: column;
-    text-align: center;
 }
 
 .footer-left {
@@ -4694,7 +4695,7 @@ body::before {
 
 .footer-right {
     flex: 1;
-    text-align: center;
+    text-align: right;
     font-family: 'Space Mono', monospace;
     font-size: clamp(0.9rem, 1.2vw, 1rem);
     line-height: 1.8;
@@ -4737,6 +4738,16 @@ body::before {
     .footer-content {
         flex-direction: column;
         gap: 30px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-left {
+        text-align: center;
+    }
+
+    .footer-thanks {
+        text-align: center;
     }
 
     .footer-right {
