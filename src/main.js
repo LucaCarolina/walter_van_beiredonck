@@ -9,6 +9,7 @@ window.$ = $
 // Import interaction modules
 import { initHeroDrag } from './heroDrag.js'
 import { initWltScroll } from './wltScroll.js'
+import { initWltMobile } from './wltMobile.js'
 import { initAesthScroll, destroyAesthScroll } from './aesthScroll.js'
 import { initWearableGrid } from './wearableGrid.js'
 import './logger.js'
@@ -21,7 +22,25 @@ import './logger.js'
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize hero drag interaction
     initHeroDrag()
-    initWltScroll()
+    
+    // WLT: mobile carousel vs desktop horizontal scroll
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches
+    if (isMobile) {
+        initWltMobile()
+    } else {
+        initWltScroll()
+    }
+
+    // Hero CTA button - smooth scroll to intro section
+    const heroCta = document.querySelector('.hero-content .cta-button')
+    const introTarget = document.querySelector('#introClapperSection')
+    
+    if (heroCta && introTarget) {
+        heroCta.addEventListener('click', (e) => {
+            e.preventDefault()
+            introTarget.scrollIntoView({ behavior: 'smooth' })
+        })
+    }
     // AESTHETICTERRORISTS is hidden behind `.wlt-locked` initially,
     // so we initialize it only when WLT unlocks. This avoids ScrollTrigger
     // measuring a `display:none` section and leaving stale pin-spacers.
