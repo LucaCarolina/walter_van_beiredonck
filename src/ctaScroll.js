@@ -1,16 +1,23 @@
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import $ from 'jquery'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export function initCtaScroll() {
-    const ctaSection = document.querySelector('#ctaSection')
-    if (!ctaSection) return
+    const $ctaSection = $('#ctaSection')
+    if (!$ctaSection.length) return
 
-    const lineWrappers = ctaSection.querySelectorAll('.cta-line-wrapper')
-    const personItems = ctaSection.querySelectorAll('.cta-media-item.person')
-    const bckgrItems = ctaSection.querySelectorAll('.cta-media-item.bckgr')
-    const allMediaItems = [...personItems, ...bckgrItems]
+    const $lineWrappers = $ctaSection.find('.cta-line-wrapper')
+    const $personItems = $ctaSection.find('.cta-media-item.person')
+    const $bckgrItems = $ctaSection.find('.cta-media-item.bckgr')
+    const $allMediaItems = $personItems.add($bckgrItems)
+    
+    // Convert jQuery objects to arrays for GSAP
+    const lineWrappers = $lineWrappers.toArray()
+    const personItems = $personItems.toArray()
+    const bckgrItems = $bckgrItems.toArray()
+    const allMediaItems = $allMediaItems.toArray()
 
     // 1. Set static positions - center images using xPercent/yPercent
     // Position background images with offset for overlap
@@ -50,7 +57,7 @@ export function initCtaScroll() {
     // Entrance Timeline - text appears first, then images
     const tl = gsap.timeline({
         scrollTrigger: {
-            trigger: ctaSection,
+            trigger: $ctaSection[0],
             start: "top 75%",
             toggleActions: "play none none reverse"
         }

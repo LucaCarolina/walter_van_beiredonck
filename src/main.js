@@ -20,8 +20,10 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
-// Initialize the application when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize the application when DOM is ready using jQuery
+$(document).ready(function() {
+    const $ = window.jQuery
+    
     // Initialize hero drag interaction
     initHeroDrag()
 
@@ -33,51 +35,62 @@ document.addEventListener('DOMContentLoaded', () => {
         initWltScroll()
     }
 
-    // Hero CTA button - smooth scroll to intro section
-    const heroCta = document.querySelector('.hero-content .cta-button')
-    const introTarget = document.querySelector('#introClapperSection')
+    // Hero CTA button - smooth scroll to intro section using jQuery
+    const $heroCta = $('.hero-content .cta-button')
+    const $introTarget = $('#introClapperSection')
 
-    if (heroCta && introTarget) {
-        heroCta.addEventListener('click', (e) => {
+    if ($heroCta.length && $introTarget.length) {
+        $heroCta.on('click', function(e) {
             e.preventDefault()
-            introTarget.scrollIntoView({ behavior: 'smooth' })
+            $('html, body').animate({
+                scrollTop: $introTarget.offset().top
+            }, 800, 'swing')
         })
     }
 
-    // Wearable section black button - smooth scroll to next section (mobile only)
-    const wearableSectionBtn = document.querySelector('.wearable-section-btn')
-    const wearableSection = document.querySelector('#wearableSection')
+    // Wearable section black button - smooth scroll to next section (mobile only) using jQuery
+    const $wearableSectionBtn = $('.wearable-section-btn')
+    const $wearableSection = $('#wearableSection')
 
-    if (wearableSectionBtn && wearableSection) {
-        wearableSectionBtn.addEventListener('click', (e) => {
+    if ($wearableSectionBtn.length && $wearableSection.length) {
+        $wearableSectionBtn.on('click', function(e) {
             e.preventDefault()
-            const nextSection = wearableSection.nextElementSibling
-            if (nextSection) {
-                nextSection.scrollIntoView({ behavior: 'smooth' })
+            const $nextSection = $wearableSection.next()
+            if ($nextSection.length) {
+                $('html, body').animate({
+                    scrollTop: $nextSection.offset().top
+                }, 800, 'swing')
             }
         })
     }
 
-    document.addEventListener('walter:wltUnlocked', () => {
+    // Custom event listeners using jQuery
+    $(document).on('walter:wltUnlocked', function() {
         window.walterLog?.('APP', 'wltUnlocked -> initAesthScroll, initWearableGrid')
         initAesthScroll()
         // Delay wearable grid init slightly to ensure section is visible
-        setTimeout(() => initWearableGrid(), 100)
+        setTimeout(function() {
+            initWearableGrid()
+        }, 100)
     })
-    document.addEventListener('walter:wltLocked', () => {
+    
+    $(document).on('walter:wltLocked', function() {
         window.walterLog?.('APP', 'wltLocked -> destroyAesthScroll')
         destroyAesthScroll()
     })
 
-    const introSection = document.querySelector('#introClapperSection')
-    const bandSection = document.querySelector('#bandTransition')
-    const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
+    // Scroll-based animations using jQuery
+    const $introSection = $('#introClapperSection')
+    const $bandSection = $('#bandTransition')
+    const clamp = function(value, min, max) {
+        return Math.min(Math.max(value, min), max)
+    }
     let ticking = false
 
-    const updateIntroScroll = () => {
-        if (!introSection) return
-        const rect = introSection.getBoundingClientRect()
-        const viewportHeight = window.innerHeight
+    const updateIntroScroll = function() {
+        if (!$introSection.length) return
+        const rect = $introSection[0].getBoundingClientRect()
+        const viewportHeight = $(window).height()
         const start = viewportHeight * 0.8
         const end = viewportHeight * 0.2
         const progress = clamp((start - rect.top) / (start - end), 0, 1)
@@ -86,17 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const imageScale = 0.7 + progress * 0.6
         const imageOpacity = clamp((progress - 0.1) / 0.9, 0, 1)
 
-        introSection.style.setProperty('--clapper-open', progress.toFixed(3))
-        introSection.style.setProperty('--clapper-text', textProgress.toFixed(3))
-        introSection.style.setProperty('--highlight-progress', highlightProgress.toFixed(3))
-        introSection.style.setProperty('--intro-image-scale', imageScale.toFixed(3))
-        introSection.style.setProperty('--intro-image-opacity', imageOpacity.toFixed(3))
+        $introSection.css('--clapper-open', progress.toFixed(3))
+        $introSection.css('--clapper-text', textProgress.toFixed(3))
+        $introSection.css('--highlight-progress', highlightProgress.toFixed(3))
+        $introSection.css('--intro-image-scale', imageScale.toFixed(3))
+        $introSection.css('--intro-image-opacity', imageOpacity.toFixed(3))
     }
 
-    const updateBandScroll = () => {
-        if (!bandSection) return
-        const rect = bandSection.getBoundingClientRect()
-        const viewportHeight = window.innerHeight
+    const updateBandScroll = function() {
+        if (!$bandSection.length) return
+        const rect = $bandSection[0].getBoundingClientRect()
+        const viewportHeight = $(window).height()
         const scrollDistance = rect.height - viewportHeight
         const startOffset = viewportHeight * 0.8
         const totalDistance = scrollDistance + startOffset
@@ -105,17 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
             progress = (startOffset - rect.top) / totalDistance
             progress = clamp(progress, 0, 1)
         }
-        bandSection.style.setProperty('--band-progress', progress.toFixed(3))
-        document.documentElement.style.setProperty('--band-progress', progress.toFixed(3))
+        $bandSection.css('--band-progress', progress.toFixed(3))
+        $('html').css('--band-progress', progress.toFixed(3))
     }
 
-    const updateAll = () => {
+    const updateAll = function() {
         updateIntroScroll()
         updateBandScroll()
         ticking = false
     }
 
-    const onScroll = () => {
+    const onScroll = function() {
         if (!ticking) {
             ticking = true
             window.requestAnimationFrame(updateAll)
@@ -123,53 +136,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateAll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', updateAll)
+    $(window).on('scroll', onScroll)
+    $(window).on('resize', updateAll)
 
     console.log('Walter Van Beiredonck site initialized')
     window.walterLog?.('APP', 'initialized', {
-        scrollY: window.scrollY,
-        bodyClasses: document.body.className
+        scrollY: $(window).scrollTop(),
+        bodyClasses: $('body').attr('class')
     })
 
-    // Puk Puk typing effect
-    const chatBox = document.getElementById('pukPukChat')
-    const chatText = document.getElementById('pukPukText')
-    const typingIndicator = document.getElementById('typingIndicator')
+    // Puk Puk typing effect using jQuery
+    const $chatBox = $('#pukPukChat')
+    const $chatText = $('#pukPukText')
+    const $typingIndicator = $('#typingIndicator')
 
-    if (chatBox && chatText && typingIndicator) {
-        const fullText = chatText.textContent.trim()
-        const fullHTML = chatText.innerHTML.trim()
+    if ($chatBox.length && $chatText.length && $typingIndicator.length) {
+        const fullText = $chatText.text().trim()
+        const fullHTML = $chatText.html().trim()
         let isTyping = false
         let hasTyped = false
 
-        chatText.textContent = ''
+        $chatText.text('')
 
-        chatBox.addEventListener('click', () => {
+        $chatBox.on('click', function() {
             if (isTyping || hasTyped) return
 
             isTyping = true
             hasTyped = true
 
-            typingIndicator.classList.add('hidden')
-            chatText.classList.add('visible')
-            chatBox.classList.add('typing')
-            chatBox.classList.add('expanded')
+            $typingIndicator.addClass('hidden')
+            $chatText.addClass('visible')
+            $chatBox.addClass('typing expanded')
 
             let i = 0
             const typeSpeed = 30
 
-            const typeWriter = () => {
+            const typeWriter = function() {
                 if (i < fullText.length) {
-                    chatText.textContent += fullText.charAt(i)
+                    $chatText.text($chatText.text() + fullText.charAt(i))
                     i++
                     setTimeout(typeWriter, typeSpeed)
                 } else {
                     isTyping = false
-                    chatText.innerHTML = fullHTML
-                    setTimeout(() => {
-                        chatBox.classList.remove('typing')
-                        chatBox.classList.add('typing-done')
+                    $chatText.html(fullHTML)
+                    setTimeout(function() {
+                        $chatBox.removeClass('typing').addClass('typing-done')
                     }, 500)
                 }
             }
@@ -178,31 +189,30 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
-    // AESTHETICTERRORISTS chat box typing effect
-    const aesthCrowdRight = document.querySelector('.aesth-crowd-right')
-    const aesthChatbox = document.getElementById('aesthChatbox')
-    const aesthChatText = document.getElementById('aesthChatText')
-    const aesthTypingIndicator = document.getElementById('aesthTypingIndicator')
+    // AESTHETICTERRORISTS chat box typing effect using jQuery
+    const $aesthCrowdRight = $('.aesth-crowd-right')
+    const $aesthChatbox = $('#aesthChatbox')
+    const $aesthChatText = $('#aesthChatText')
+    const $aesthTypingIndicator = $('#aesthTypingIndicator')
 
-    if (aesthCrowdRight && aesthChatbox && aesthChatText && aesthTypingIndicator) {
+    if ($aesthCrowdRight.length && $aesthChatbox.length && $aesthChatText.length && $aesthTypingIndicator.length) {
         const fullText = "In a move that would have crushed a lesser artist, Walter lost his financial backing and was legally prohibited from using his own name on his creations. Most designers would have vanished into the archives, but Walter went underground. Stripped of his identity, he launched a ghost label."
         let isTyping = false
         let typewriterTimeout = null
 
-        aesthCrowdRight.addEventListener('mouseenter', () => {
+        $aesthCrowdRight.on('mouseenter', function() {
             if (isTyping) return
             isTyping = true
-            aesthChatbox.classList.add('expanded')
-            aesthTypingIndicator.classList.add('hidden')
-            aesthChatText.classList.add('visible')
-            aesthChatText.textContent = ''
+            $aesthChatbox.addClass('expanded')
+            $aesthTypingIndicator.addClass('hidden')
+            $aesthChatText.addClass('visible').text('')
 
             let i = 0
             const typeSpeed = 25
 
-            const typeWriter = () => {
+            const typeWriter = function() {
                 if (i < fullText.length && isTyping) {
-                    aesthChatText.textContent += fullText.charAt(i)
+                    $aesthChatText.text($aesthChatText.text() + fullText.charAt(i))
                     i++
                     typewriterTimeout = setTimeout(typeWriter, typeSpeed)
                 } else {
@@ -212,16 +222,15 @@ document.addEventListener('DOMContentLoaded', () => {
             typeWriter()
         })
 
-        aesthCrowdRight.addEventListener('mouseleave', () => {
+        $aesthCrowdRight.on('mouseleave', function() {
             isTyping = false
             if (typewriterTimeout) {
                 clearTimeout(typewriterTimeout)
                 typewriterTimeout = null
             }
-            aesthChatbox.classList.remove('expanded')
-            aesthTypingIndicator.classList.remove('hidden')
-            aesthChatText.classList.remove('visible')
-            aesthChatText.textContent = ''
+            $aesthChatbox.removeClass('expanded')
+            $aesthTypingIndicator.removeClass('hidden')
+            $aesthChatText.removeClass('visible').text('')
         })
     }
 
