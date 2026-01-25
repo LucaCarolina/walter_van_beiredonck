@@ -2391,11 +2391,11 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     position: relative;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 28px 40px 64px;
+    padding: 0;
     min-height: min(78vh, 820px);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 0;
 }
 
 .truth-era {
@@ -2405,14 +2405,21 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     font-size: 0.95rem;
     letter-spacing: 1px;
     opacity: 0.9;
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: var(--color-white);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .truth-layout {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 28px;
-    align-items: end;
     position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin-left: calc(-50vw + 50%);
+    overflow: hidden;
 }
 
 .truth-card {
@@ -2420,6 +2427,11 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     border: 2px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
     padding: 34px 34px 30px;
+    position: absolute;
+    bottom: 164px;
+    left: 140px;
+    max-width: 600px;
+    z-index: 1;
 }
 
 .truth-title {
@@ -2444,29 +2456,27 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     margin-top: 16px;
 }
 
-.truth-visual {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    overflow: hidden;
-}
-
 .truth-image {
-    width: 100%;
-    max-width: 520px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100vw;
     height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.55));
+    object-position: center center;
+    transform: translateY(-50%);
+    z-index: 0;
 }
 
 .truth-mark {
     position: absolute;
-    left: 10px;
-    bottom: 10px;
+    left: 15px;
+    bottom: 190px;
     width: 150px;
     height: auto;
     pointer-events: none;
     filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.55));
+    z-index: 3;
 }
 
 @media (max-width: 968px) {
@@ -2479,16 +2489,20 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     }
 
     .truth-layout {
-        grid-template-columns: 1fr;
-        align-items: start;
-    }
-
-    .truth-visual {
-        justify-content: center;
+        height: 100vh;
+        padding: 0;
     }
 
     .truth-image {
-        max-width: 640px;
+        transform: scale(1.1);
+    }
+
+    .truth-card {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        max-width: none;
     }
 
     .truth-mark {
