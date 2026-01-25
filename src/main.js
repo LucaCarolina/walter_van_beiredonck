@@ -12,17 +12,19 @@ import { initWltScroll } from './wltScroll.js'
 import { initWltMobile } from './wltMobile.js'
 import { initAesthScroll, destroyAesthScroll } from './aesthScroll.js'
 import { initWearableGrid } from './wearableGrid.js'
+import { initCtaScroll } from './ctaScroll.js'
 import './logger.js'
 
-// This file serves as the entry point for Vite
-// All JavaScript functionality will be organized into separate modules
-// and imported here as needed
+// Import GSAP
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
 
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize hero drag interaction
     initHeroDrag()
-    
+
     // WLT: mobile carousel vs desktop horizontal scroll
     const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches
     if (isMobile) {
@@ -34,16 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hero CTA button - smooth scroll to intro section
     const heroCta = document.querySelector('.hero-content .cta-button')
     const introTarget = document.querySelector('#introClapperSection')
-    
+
     if (heroCta && introTarget) {
         heroCta.addEventListener('click', (e) => {
             e.preventDefault()
             introTarget.scrollIntoView({ behavior: 'smooth' })
         })
     }
-    // AESTHETICTERRORISTS is hidden behind `.wlt-locked` initially,
-    // so we initialize it only when WLT unlocks. This avoids ScrollTrigger
-    // measuring a `display:none` section and leaving stale pin-spacers.
+
     document.addEventListener('walter:wltUnlocked', () => {
         window.walterLog?.('APP', 'wltUnlocked -> initAesthScroll, initWearableGrid')
         initAesthScroll()
@@ -62,17 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateIntroScroll = () => {
         if (!introSection) return
-
         const rect = introSection.getBoundingClientRect()
         const viewportHeight = window.innerHeight
         const start = viewportHeight * 0.8
         const end = viewportHeight * 0.2
         const progress = clamp((start - rect.top) / (start - end), 0, 1)
-
-        // Text animation starts later (at 55% progress) so user can catch it
         const textProgress = clamp((progress - 0.55) / 0.45, 0, 1)
         const highlightProgress = clamp((progress - 0.75) / 0.25, 0, 1)
-        // Image animation stays the same
         const imageScale = 0.7 + progress * 0.6
         const imageOpacity = clamp((progress - 0.1) / 0.9, 0, 1)
 
@@ -85,22 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateBandScroll = () => {
         if (!bandSection) return
-
         const rect = bandSection.getBoundingClientRect()
         const viewportHeight = window.innerHeight
         const scrollDistance = rect.height - viewportHeight
-
-        // Start animation earlier: when the section top is 80% into the viewport
         const startOffset = viewportHeight * 0.8
         const totalDistance = scrollDistance + startOffset
-
         let progress = 0
-
         if (totalDistance > 0) {
             progress = (startOffset - rect.top) / totalDistance
             progress = clamp(progress, 0, 1)
         }
-
         bandSection.style.setProperty('--band-progress', progress.toFixed(3))
         document.documentElement.style.setProperty('--band-progress', progress.toFixed(3))
     }
@@ -139,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let isTyping = false
         let hasTyped = false
 
-        // Initially hide the text, show typing indicator
         chatText.textContent = ''
 
         chatBox.addEventListener('click', () => {
@@ -148,14 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
             isTyping = true
             hasTyped = true
 
-            // Hide typing indicator, show text container, expand box
             typingIndicator.classList.add('hidden')
             chatText.classList.add('visible')
             chatBox.classList.add('typing')
             chatBox.classList.add('expanded')
 
             let i = 0
-            const typeSpeed = 30 // milliseconds per character
+            const typeSpeed = 30
 
             const typeWriter = () => {
                 if (i < fullText.length) {
@@ -163,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     i++
                     setTimeout(typeWriter, typeSpeed)
                 } else {
-                    // Typing complete - restore HTML with span for underline
                     isTyping = false
                     chatText.innerHTML = fullHTML
                     setTimeout(() => {
@@ -177,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
-    // AESTHETICTERRORISTS chat box typing effect (on hover over RIGHT crowd)
+    // AESTHETICTERRORISTS chat box typing effect
     const aesthCrowdRight = document.querySelector('.aesth-crowd-right')
     const aesthChatbox = document.getElementById('aesthChatbox')
     const aesthChatText = document.getElementById('aesthChatText')
@@ -188,20 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let isTyping = false
         let typewriterTimeout = null
 
-        // Trigger on hover over the right crowd
         aesthCrowdRight.addEventListener('mouseenter', () => {
             if (isTyping) return
-
             isTyping = true
-
-            // Expand box, hide typing indicator, show text container
             aesthChatbox.classList.add('expanded')
             aesthTypingIndicator.classList.add('hidden')
             aesthChatText.classList.add('visible')
             aesthChatText.textContent = ''
 
             let i = 0
-            const typeSpeed = 25 // milliseconds per character
+            const typeSpeed = 25
 
             const typeWriter = () => {
                 if (i < fullText.length && isTyping) {
@@ -212,23 +195,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     isTyping = false
                 }
             }
-
             typeWriter()
         })
 
-        // Reset on mouse leave
         aesthCrowdRight.addEventListener('mouseleave', () => {
             isTyping = false
             if (typewriterTimeout) {
                 clearTimeout(typewriterTimeout)
                 typewriterTimeout = null
             }
-
-            // Collapse box, show typing indicator, hide text
             aesthChatbox.classList.remove('expanded')
             aesthTypingIndicator.classList.remove('hidden')
             aesthChatText.classList.remove('visible')
             aesthChatText.textContent = ''
         })
     }
+
+    // CTA Section Animation - Handled by dedicated module
+    initCtaScroll()
 })

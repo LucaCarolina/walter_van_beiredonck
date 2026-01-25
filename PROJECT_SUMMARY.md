@@ -21,11 +21,12 @@ An interactive fashion designer portfolio website for Walter Van Beirendonck, bu
 │   └── photos/          # All images (PNG/JPG) ~40 files
 └── src/
     ├── main.js          # Entry point, initializes all modules
-    ├── style.css        # All styles (~3000+ lines)
+    ├── style.css        # All styles (~4000+ lines)
     ├── heroDrag.js      # Hero section drag interaction
     ├── wltScroll.js     # W.&L.T. horizontal scroll section
     ├── aesthScroll.js   # Aestheticterrorists scroll animations
     ├── wearableGrid.js  # Infinite draggable grid (930 lines)
+    ├── ctaScroll.js     # CTA section text and image animations
     └── logger.js        # Custom logging utility
 ```
 
@@ -160,19 +161,41 @@ An interactive fashion designer portfolio website for Walter Van Beirendonck, bu
 - Images: `runway.png`, `crowd.png`, `protest1.png`, `model.png`, `walter.png`
 
 ### 7. Truth Section (#truthSection)
-- **Status**: ⚠️ Needs Mobile Responsiveness
+- **Status**: ✅ Updated Design
 - Red banner header "Rebellion Through Truth"
-- Two-column layout: text card + jester image
-- Era label: "2010s—PRESENT"
-- Images: `walter-truth-jester.png`, `mark.png`
-- **Note**: Has some tablet adjustments (≤968px) but full mobile layout needed
+- **Layout**: Full viewport section (100vh × 100vw)
+- **Image**: `walter-truth-jester.png` positioned as element (not background)
+  - Uses `object-fit: contain` to fit width without cropping
+  - Centered vertically with `top: 50%` and `transform: translateY(-50%)`
+- **Text Card**: Absolutely positioned over image
+  - Position: `bottom: 164px, left: 140px`
+  - Black background with transparency (rgba(0, 0, 0, 0.92))
+  - Contains "THE COURT JESTER" title and body text
+- **Era Label**: "2010s—PRESENT" positioned on top of image
+  - Centered horizontally, white text with shadow
+  - Position: `top: 28px, left: 50%, transform: translateX(-50%)`
+- **Decorative Mark**: `mark.png` positioned above text box
+  - Position: `left: 25px, bottom: calc(164px + 430px)`
+  - Contains both exclamation marks in single image
+- **Note**: Mobile responsiveness may need refinement
 
 ### 8. Wearable Resistance Section (#wearableSection)
-- **Status**: ⚠️ Needs Mobile Responsiveness
+- **Status**: ✅ Updated Design
+- **Canvas Styling**:
+  - 30px black border around draggable canvas
+  - Background color: #F7F5E9 (cream)
+  - Box-sizing: border-box to include border in sizing
+- **Title**: "Wearable Resistance"
+  - Positioned 15px lower using `transform: translateY(15px)`
+  - Cream background (#F7F5E9) with black border-bottom
+- **Flip Cards**:
+  - Back of cards: 3px black border stroke
+  - Background: #F7F5E9 (cream) for both front and back
 - Infinite draggable canvas with 7 flip cards
 - macOS Dock-style proximity effect
 - Card sizing: base 220×290, hover 340×450
 - Size variations: 0.7x to 1.15x
+- **Note**: Mobile responsiveness may need refinement
 
 ### 9. Walter-fy Your Voice Section (#walterfySection)
 - **Status**: ⚠️ Needs Mobile Responsiveness
@@ -180,11 +203,75 @@ An interactive fashion designer portfolio website for Walter Van Beirendonck, bu
 - Black text box with red headline
 - **Note**: Has some responsive adjustments (≤1024px, ≤768px) but may need refinement
 
-### 10. CTA / Footer Section (.cta-section)
-- **Status**: ⚠️ Needs Mobile Responsiveness
-- Large text invitation to MoMu museum
-- Two-column layout
-- Final instruction with glitch effect
+### 10. CTA Section (.cta-section)
+- **Status**: ✅ Updated Design with GSAP Animations
+- **Background**: Cream (#F7F5E9)
+- **Text Content**: "A new era is here. Stop watching from the sidelines and confront the history at MoMu."
+- **Layout**: 5 lines of text, centered
+  - Line 1: "A new era is here." (red #FF0000)
+  - Line 2: "Stop watching"
+  - Line 3: "from the sidelines"
+  - Line 4: "and confront the"
+  - Line 5: "history at MoMu."
+- **Typography**: 
+  - Font size: 50px (desktop), responsive on mobile
+  - Font family: 'Druk Text Wide Trial'
+  - Uppercase, letter-spacing: 4px
+  - Normal (not italic)
+- **Images**: 
+  - 6 pairs of images (person + background) positioned on sides
+  - Person images: 280px width, positioned at 18-22% (left) and 78-82% (right)
+  - Background images: 300px width, offset by -15px for overlap
+  - Images are static (no parallax)
+  - Full opacity for all images
+- **GSAP ScrollTrigger Animations**:
+  - Text lines animate from below (y: 80px → 0) line by line
+  - Fast but smooth animation: 0.5s duration, 0.08s stagger
+  - Images fade in after text with 0.6s duration
+  - Scroll-triggered: starts at 'top 75%'
+- **Module**: `ctaScroll.js` handles all animations
+- **Note**: Mobile responsiveness may need refinement
+
+### 11. Plan Your Visit Section (.visit-section)
+- **Status**: ✅ Complete
+- **Background**: Black (#000000)
+- **Content**:
+  - Red headline: "WALTER VAN BEIREDONCK" (large, bold, uppercase)
+  - White description text about avant-garde fashion experience
+  - Red "PLAN YOUR VISIT" button with hover effect
+  - Social media icons (Instagram and Facebook) - white outline icons
+- **Layout**: Centered, vertical stack
+- **Styling**: High contrast black/white with red accents
+
+### 12. MoMu Signup Section (.signup-section)
+- **Status**: ✅ Complete
+- **Background**: Cream (#F7F5E9)
+- **Large Background Logo**: 
+  - MoMu logo (`MoMu_News_MoMuLogo.png`) displayed large in background
+  - 80vw width, full opacity (100%)
+  - Positioned behind content box
+- **Content Box** (white):
+  - Max-width: 1400px (doubled from original)
+  - Positioned lower with margin-top: 350px
+  - Centered text alignment
+  - Headline: "MoMu is more than a museum; <br>it is the **evidence**." (evidence in red)
+  - Description text
+  - Email signup form:
+    - Email input: 300px width, centered
+    - Red "SUBSCRIBE" button
+    - Form elements centered together
+- **Styling**: White box with shadow, centered content
+
+### 13. Footer Section (.footer-section)
+- **Status**: ✅ Complete
+- **Background**: Black (#000000)
+- **Layout**: Two-column, vertically centered
+  - Left: "THANKS FOR READING" (large, bold, white, uppercase)
+  - Right: Contact information (white text, right-aligned on desktop, left-aligned on mobile)
+    - Address: Nationalestraat 28, 2000 Antwerp, Belgium
+    - Phone: +32 (0)3 470 27 70
+    - Email: publiek@momu.be
+- **Styling**: High contrast, clean layout
 
 ## Module Communication
 ```javascript
@@ -229,10 +316,10 @@ document.addEventListener('walter:wltUnlocked', () => {
 
 1. **W.&L.T. Horizontal Scroll Section** - Horizontal scroll needs mobile adaptation
 2. **Aestheticterrorists Section** - Complex layered animations need mobile optimization
-3. **Truth Section** - Two-column layout needs mobile stacking
+3. **Truth Section** - Full viewport layout may need mobile adjustments
 4. **Wearable Resistance Section** - Draggable grid needs touch optimization
 5. **Walter-fy Your Voice Section** - Layout may need refinement
-6. **CTA / Footer Section** - Two-column layout needs mobile stacking
+6. **CTA / Footer Section** - Animated text lines may need mobile sizing adjustments
 
 ## Mobile Breakpoints Used
 - **768px**: Tablets and large phones (primary mobile breakpoint)
@@ -248,6 +335,9 @@ document.addEventListener('walter:wltUnlocked', () => {
 - Custom scroll handlers in `main.js` using `requestAnimationFrame`
 - CSS variables for animation progress: `--clapper-open`, `--clapper-text`, `--band-progress`
 - Smooth performance with throttled scroll events
+- **GSAP ScrollTrigger** for CTA section text animations
+  - Lines animate from off-screen positions to center
+  - Scroll-scrubbed animations for smooth scroll-based control
 
 ### Touch Interactions
 - Hero drag uses native touch events with `{ passive: false }`
@@ -262,13 +352,27 @@ document.addEventListener('walter:wltUnlocked', () => {
 - Added 2px black border on all screen sizes
 - Smooth scroll to intro section using `scrollIntoView({ behavior: 'smooth' })`
 
+### Recent Design Updates
+- **Truth Section**: Full viewport layout with image element and overlaid text card
+- **Wearable Section**: Canvas styling with 30px border and cream background (#F7F5E9)
+- **CTA Section**: Restructured with 5-line animated text, static images positioned on sides
+- **New Sections Added**:
+  - Plan Your Visit section (dark theme with red CTA)
+  - MoMu Signup section (cream background with large logo, email signup)
+  - Footer section (contact information, vertically centered)
+
 ## Dev Server
 - Running at `http://localhost:5174/`
 - Start with: `npm run dev`
 
 ## Git Status
 - **Branch**: dev (tracking origin/dev)
-- **Modified**: `index.html`, `src/style.css`, `src/heroDrag.js`, `src/main.js`
+- **Modified**: `index.html`, `src/style.css`, `src/main.js`
+- **Recent Changes**:
+  - Truth section: Full viewport layout, image positioning, text card overlay
+  - Wearable section: Canvas border and background styling, title positioning
+  - CTA section: Restructured with animated text and static side images
+  - Added three new sections: Plan Your Visit, MoMu Signup, Footer
 - **Untracked**: `public/photos/truth-glitch.png`, `public/photos/].png`
 
 ## Next Steps for Full Mobile Responsiveness
@@ -280,13 +384,19 @@ document.addEventListener('walter:wltUnlocked', () => {
 5. **Walter-fy Section**: Refine text box positioning and sizing
 6. **CTA/Footer**: Stack columns and adjust text sizes
 
-## File Locations for Key Responsive Styles
+## File Locations for Key Styles
 
 - **Hero Section Mobile**: `src/style.css` lines ~2689-2856
 - **Intro Clapperboard Mobile**: `src/style.css` lines ~2858-2962
 - **Band Transition Mobile**: `src/style.css` lines ~2925-2995
+- **Truth Section**: `src/style.css` lines ~2367-2479 (banner, layout, image, card, mark)
+- **Wearable Section**: `src/style.css` lines ~2630-2758 (section, canvas, cards)
+- **CTA Section**: `src/style.css` lines ~2558-2758 (text styling, images, animations)
+- **Plan Your Visit Section**: `src/style.css` lines ~3900-3970
+- **MoMu Signup Section**: `src/style.css` lines ~3971-4055
+- **Footer Section**: `src/style.css` lines ~4056-4095
 - **Animation Timing**: `src/main.js` lines ~55-70
-- **CTA Scroll Handler**: `src/main.js` lines ~28-36
+- **CTA Scroll Handler**: `src/ctaScroll.js` (dedicated module)
 
 ## Notes
 - All responsive work maintains desktop design aesthetics where possible
