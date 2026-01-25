@@ -275,10 +275,8 @@ body {
     bottom: 15%;
     right: 5%;
     background-color: var(--color-red);
-    /* Changed to Red */
     color: var(--color-black);
-    /* Changed to Black */
-    border: none;
+    border: 2px solid var(--color-black);
     font-weight: bold;
     text-transform: uppercase;
     padding: 15px 30px;
@@ -972,6 +970,440 @@ body {
     overflow: hidden;
 }
 
+/* ============================================
+   W.&L.T. MOBILE CAROUSEL
+   (replaces horizontal scroll on <=768px)
+   ============================================ */
+.wlt-carousel {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .wlt-track {
+        display: none !important;
+    }
+
+    /* Remove any default height/padding that might add extra space */
+    .wlt-section {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .wlt-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 24px;
+        padding: 20px 0;
+        min-height: 100vh;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        position: relative;
+        z-index: 5; /* Above background but below carousel */
+    }
+
+    .wlt-carousel {
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 0 14px;
+        position: relative;
+        z-index: 10; /* Above background (z-index: 0) but below overlay (z-index: 10000) */
+        margin-top: 0;
+    }
+
+    .wlt-carousel-viewport {
+        overflow: hidden; /* Clip slides but allow overlay outside */
+        width: 100%;
+    }
+
+    .wlt-carousel-track {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        will-change: transform;
+        transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .wlt-slide {
+        flex: 0 0 auto;
+        width: min(340px, 78vw);
+        outline: none;
+        cursor: pointer;
+        filter: blur(6px);
+        opacity: 0.55;
+        transform: scale(0.88);
+        transition: filter 220ms ease, opacity 220ms ease, transform 220ms ease;
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .wlt-slide-inner {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .wlt-slide-image {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .wlt-slide[data-termination="1"] {
+        overflow: visible !important; /* Termination slide must show overlay */
+    }
+
+    .wlt-slide.is-prev,
+    .wlt-slide.is-next {
+        filter: blur(2px);
+        opacity: 0.75;
+        transform: scale(0.93);
+    }
+
+    .wlt-slide.is-active {
+        filter: none;
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .wlt-slide-inner {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        border: 2px solid rgba(255, 255, 255, 0.22);
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+        overflow: hidden;
+        border-radius: 2px;
+        perspective: 1000px;
+    }
+
+    /* Flip card structure for mobile carousel */
+    .wlt-flip-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+    }
+
+    .wlt-slide.is-flipped .wlt-flip-inner {
+        transform: rotateY(180deg);
+    }
+
+    .wlt-flip-front,
+    .wlt-flip-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+
+    .wlt-flip-back {
+        transform: rotateY(180deg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: var(--color-red);
+        border: 2px solid var(--color-black);
+        color: var(--color-black);
+    }
+
+    .wlt-flip-title {
+        font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+        font-size: 1.4rem;
+        margin: 0 0 8px;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    .wlt-flip-subtitle {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.9rem;
+        margin: 0 0 12px;
+        text-align: center;
+        opacity: 0.9;
+    }
+
+    .wlt-flip-desc {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.8rem;
+        margin: 0;
+        text-align: center;
+        line-height: 1.5;
+    }
+
+    .wlt-slide-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .wlt-carousel-arrow {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        border: 2px solid var(--color-red);
+        background: rgba(0, 0, 0, 0.85);
+        color: var(--color-red);
+        font-family: 'Space Mono', monospace;
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+        display: grid !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        place-items: center;
+        transition: transform 120ms ease, opacity 120ms ease;
+        z-index: 30;
+    }
+
+    .wlt-carousel-arrow:active {
+        transform: scale(0.96);
+    }
+
+    .wlt-carousel-arrow:disabled {
+        opacity: 0.25;
+        cursor: default;
+    }
+
+    /* Termination slide inside carousel - should not be blurred */
+    .wlt-slide[data-termination="1"] {
+        filter: none !important;
+    }
+
+    .wlt-slide-termination {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        display: block;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .wlt-slide-termination .termination-wrapper {
+        width: 100%;
+        height: 500px !important; /* Reduced height on mobile - crop from bottom */
+        max-height: 500px !important;
+        pointer-events: auto;
+        cursor: pointer;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        overflow: hidden; /* Crop the bottom part */
+    }
+
+    .wlt-slide-termination .term-piece {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: 100% !important;
+    }
+    
+    /* Adjust clip-paths to show less of the bottom section on mobile */
+    .wlt-slide-termination .term-piece.top {
+        clip-path: inset(0 0 66% 0) !important;
+    }
+    
+    .wlt-slide-termination .term-piece.mid {
+        clip-path: inset(34% 0 40% 0) !important; /* Show less bottom part */
+    }
+    
+    .wlt-slide-termination .term-piece.bot {
+        clip-path: inset(60% 0 0 0) !important; /* Crop more from bottom */
+    }
+
+    /* Progress bar and text positioned OUTSIDE slide-inner (not clipped) */
+    .wlt-slide[data-termination="1"] {
+        position: relative;
+        height: auto !important; /* Don't force height */
+        min-height: auto !important;
+    }
+    
+    /* Ensure slide-inner doesn't expand - match termination wrapper height */
+    .wlt-slide[data-termination="1"] .wlt-slide-inner {
+        height: 500px !important; /* Match reduced termination wrapper height */
+        min-height: 500px !important;
+        max-height: 500px !important;
+        aspect-ratio: auto !important; /* Override aspect-ratio */
+    }
+
+    .wlt-slide[data-termination="1"] .wlt-overlay-external {
+        position: fixed; /* Use fixed positioning to escape all stacking contexts */
+        bottom: 60px; /* Position below the reduced-height paper */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 320px;
+        z-index: 10000; /* EXTREMELY HIGH z-index to be on top of everything */
+        pointer-events: none;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    .wlt-slide-termination .termination-wrapper {
+        position: relative;
+        margin-bottom: 0;
+    }
+
+    .wlt-slide[data-termination="1"] .wlt-overlay-external .term-text {
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+        margin-top: 0;
+        padding: 8px 12px;
+        background: rgba(0, 0, 0, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: var(--color-white);
+    }
+
+    .wlt-slide[data-termination="1"] .wlt-overlay-external .term-progress-bar {
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        width: 100%;
+        height: 6px;
+        margin: 0 auto;
+        margin-top: 0;
+        margin-bottom: 0;
+        background: rgba(51, 51, 51, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .wlt-slide[data-termination="1"] .wlt-overlay-external .term-progress-fill {
+        height: 100%;
+        background: var(--color-red);
+    }
+
+    /* Remove any cream background below termination - keep black 1990s background */
+    .wlt-section:not(.crushed) {
+        background-color: var(--color-black) !important;
+    }
+
+    /* Ensure no content sections show below WLT when locked */
+    body.wlt-locked .wlt-section + section {
+        display: none !important;
+    }
+
+    /* Ensure WLT section height matches content - no extra space */
+    .wlt-section {
+        height: auto !important;
+        min-height: 100vh;
+        max-height: none;
+        overflow: hidden !important; /* Hide overflow to prevent extra space */
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    
+    /* Remove any extra space from container */
+    .wlt-container {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        overflow: hidden !important; /* Hide overflow to prevent extra space */
+    }
+    
+    /* Ensure carousel doesn't create extra space */
+    .wlt-carousel {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* Make sure termination slide shows 1990s background, not cream */
+    .wlt-slide-termination {
+        background-color: transparent;
+    }
+
+    .wlt-slide-termination .termination-wrapper {
+        background-color: transparent;
+    }
+}
+
+/* WLT details modal */
+.wlt-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+
+.wlt-modal[hidden] {
+    display: none;
+}
+
+.wlt-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.wlt-modal-card {
+    position: relative;
+    z-index: 1;
+    width: min(520px, calc(100vw - 28px));
+    margin: 12vh auto 0;
+    background: #F7F5E9;
+    border: 3px solid var(--color-black);
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.3);
+    padding: 22px 18px 18px;
+}
+
+.wlt-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--color-black);
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.wlt-modal-close:hover {
+    opacity: 1;
+}
+
+.wlt-modal-title {
+    margin: 0 0 8px;
+    font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+    font-size: 1.7rem;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.wlt-modal-subtitle {
+    margin: 0 0 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.wlt-modal-desc {
+    margin: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+body.wlt-modal-open {
+    overflow: hidden;
+}
+
 /* After crushing, hide the background so it doesn't show behind other sections */
 .wlt-section.crushed {
     background-color: transparent !important;
@@ -988,6 +1420,14 @@ body {
     position: relative;
     display: flex;
     align-items: center;
+}
+
+/* Desktop: ensure container height is preserved */
+@media (min-width: 769px) {
+    .wlt-container {
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
 }
 
 /* Background Parallax */
@@ -1017,6 +1457,55 @@ body {
     display: flex;
     width: max-content;
     /* Ensure it's wide enough */
+}
+
+/* Mobile: hide original background, create new one with proper z-index */
+@media (max-width: 768px) {
+    /* Hide original desktop background on mobile */
+    .wlt-background {
+        display: none !important;
+    }
+
+    /* Mobile-specific background with lower z-index */
+    .wlt-background-mobile {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; /* BELOW everything */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10vh;
+        opacity: 0.3;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .wlt-bg-text-row-mobile {
+        font-family: 'Druk Text Wide Trial', 'Impact', sans-serif;
+        font-size: 15vh;
+        color: var(--color-red);
+        white-space: nowrap;
+        line-height: 1;
+        font-weight: bold;
+        display: flex;
+        width: max-content;
+    }
+
+    /* Ensure section height matches content (last row of 1990s) */
+    .wlt-section {
+        height: auto !important;
+        min-height: 100vh;
+        max-height: none;
+    }
+
+    .wlt-container {
+        height: auto !important;
+        min-height: 100vh;
+        max-height: none;
+    }
 }
 
 /* Track for horizontal movement */
@@ -2645,7 +3134,7 @@ body::before {
     }
 
     .band-transition {
-        height: 180vh;
+        height: 280vh;
     }
 
     .band {
@@ -2667,6 +3156,195 @@ body::before {
     .cta-text-secondary::before,
     .cta-text-secondary::after {
         display: none;
+    }
+}
+
+/* ============================================
+   BAND TRANSITION + TECHNO-SHAMAN (Mobile)
+   Fix: sticky track was sitting under fixed header,
+   and stacked content was taller than the viewport.
+   ============================================ */
+@media (max-width: 768px) {
+    /* Global mobile body-text baseline */
+    body {
+        font-size: 14px;
+    }
+
+    /* Enforce 14px body text across sections (headings keep their own sizing) */
+    .clapper-text,
+    .column-text,
+    .truth-body,
+    .ts-body-text,
+    .walterfy-quote,
+    .walterfy-cta {
+        font-size: 14px;
+    }
+
+    /* Keep the sticky/pinned content fully visible under the fixed header */
+    .band-track {
+        top: 90px; /* matches mobile header/hero offset */
+        height: calc(100vh - 90px);
+    }
+
+    /* Avoid vertical centering cutting off tall content */
+    .band-content-layer {
+        align-items: flex-start;
+    }
+
+    .band-content-inner {
+        padding: 12px 14px 16px;
+    }
+
+    .techno-shaman-section {
+        /* Re-layout: date above title, overlay chat on image, body text below */
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        row-gap: 10px;
+        align-items: start;
+    }
+
+    .ts-left {
+        /* Keep DOM structure, but let children participate in parent grid for reordering */
+        display: contents;
+    }
+
+    .ts-right {
+        display: contents;
+    }
+
+    /* Year above title */
+    .ts-date {
+        grid-row: 1;
+        grid-column: 1;
+        margin: 0;
+        font-size: 14px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    .ts-title {
+        grid-row: 2;
+        grid-column: 1;
+        font-size: 40px;
+        margin: 0;
+        text-align: center;
+    }
+
+    .ts-image-left {
+        grid-row: 3;
+        grid-column: 1;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .ts-image-left img {
+        width: 100%;
+        max-width: 520px;
+        max-height: 52vh;
+        object-fit: contain;
+        margin: 0 auto;
+    }
+
+    /* Overlay the chat on the image (higher) */
+    .ts-chat-container {
+        grid-row: 3;
+        grid-column: 1;
+        justify-self: center;
+        align-self: end;
+        margin: 0;
+        min-height: 0;
+        z-index: 20;
+        pointer-events: none; /* keep only the chat box itself interactive */
+    }
+
+    .ts-chat-box {
+        pointer-events: auto;
+        padding: 16px 16px;
+        font-size: 14px;
+        max-width: min(380px, calc(100vw - 34px));
+        transform: translateY(-46px); /* lift the bubble higher on the image */
+    }
+
+    .ts-chat-box::after {
+        font-size: 0.65rem;
+        bottom: -20px;
+    }
+
+    .ts-body-text {
+        grid-row: 4;
+        grid-column: 1;
+        margin-top: 0;
+        font-size: 14px;
+        line-height: 1.55;
+    }
+
+    .ts-body-text p {
+        margin-bottom: 10px;
+    }
+
+    .ts-body-text p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Put Puk Puk in the lower-right corner (peeking in) */
+    .ts-pukpuk {
+        top: auto;
+        bottom: 66px;
+        right: -22px;
+        transform: none;
+        width: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .clapper-text,
+    .column-text,
+    .truth-body,
+    .ts-body-text,
+    .walterfy-quote,
+    .walterfy-cta {
+        font-size: 14px;
+    }
+
+    .band-track {
+        top: 82px; /* matches smaller mobile header/hero offset */
+        height: calc(100vh - 82px);
+    }
+
+    .band-content-inner {
+        padding: 10px 12px 14px;
+    }
+
+    .ts-title {
+        font-size: 34px;
+    }
+
+    .ts-image-left img {
+        max-width: 100%;
+        max-height: 50vh;
+    }
+
+    .ts-chat-container {
+        /* keep overlay behavior; slightly less lift on smaller screens */
+        z-index: 20;
+    }
+
+    .ts-chat-box {
+        max-width: 100%;
+        transform: translateY(-42px);
+    }
+
+    .ts-pukpuk {
+        width: 200px;
+        right: -20px;
+        bottom: 56px;
     }
 }
 
@@ -2930,6 +3608,11 @@ body::before {
         font-size: 35px;
     }
 
+    /* Slower ribbon animation on mobile - more scroll distance */
+    .band-transition {
+        height: 320vh;
+    }
+
     /* Position ribbons closer together on mobile */
     .band-1 {
         top: 12%;
@@ -2988,7 +3671,11 @@ body::before {
         margin-top: 14px;
     }
 
-    /* Band / Ribbons Section */
+    /* Band / Ribbons Section - even slower on small phones */
+    .band-transition {
+        height: 350vh;
+    }
+
     .band {
         width: 150vw;
         padding: 10px 20px;

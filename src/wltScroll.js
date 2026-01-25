@@ -344,8 +344,10 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
                 const scrollTarget = st.end - buffer
                 log('scrollBackListener:scrollTo', { scrollTarget, stEnd: st.end, buffer })
                 window.scrollTo({ top: scrollTarget, behavior: 'auto' })
-                gsap.set(track, { x: getScrollAmount() })
-                log('scrollBackListener:track forced', { x: getScrollAmount() })
+                if (track && typeof getScrollAmount === 'function') {
+                    gsap.set(track, { x: getScrollAmount() })
+                    log('scrollBackListener:track forced', { x: getScrollAmount() })
+                }
                 logState('scrollBackListener COMPLETE')
             }
 
@@ -440,3 +442,4 @@ function initTermination(resetTerminationOnly, getIsCrushed, setIsCrushed, getSc
         breakTl.to([pieces.top, pieces.mid, pieces.bot], { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.55)
     }
 }
+
