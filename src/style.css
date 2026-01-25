@@ -2418,6 +2418,119 @@ body.wlt-locked section:not(.wlt-section):not(.hero):not(.intro-clapper):not(.ba
     }
 }
 
+/* ========================================
+   WALTER-FY YOUR VOICE Section
+   ======================================== */
+.walterfy-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.walterfy-stage {
+    position: relative;
+    flex: 1;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+/* Full image with figure and diagonal background */
+.walterfy-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 125%;
+    height: 125%;
+    object-fit: contain;
+    object-position: left top;
+    z-index: 1;
+}
+
+/* Text box - solid black background */
+.walterfy-textbox {
+    position: absolute;
+    top: calc(50% + 200px);
+    left: calc(50% + 150px);
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background-color: var(--color-black);
+    padding: 36px 40px;
+    max-width: 780px;
+}
+
+.walterfy-headline {
+    margin: 0 0 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-red);
+}
+
+.walterfy-quote {
+    margin: 0 0 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--color-white);
+}
+
+.walterfy-cta {
+    margin: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.walterfy-footer {
+    background-color: var(--color-black);
+    height: 60px;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .walterfy-textbox {
+        max-width: 520px;
+        padding: 30px 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .walterfy-stage {
+        flex-direction: column;
+        min-height: auto;
+        padding: 0;
+    }
+
+    .walterfy-image {
+        position: relative;
+        height: auto;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    .walterfy-textbox {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        max-width: 100%;
+    }
+
+    .walterfy-footer {
+        height: 40px;
+    }
+}
+
 /* Scroll-triggered animations */
 .fade-in {
     opacity: 0;
@@ -2492,26 +2605,43 @@ body::before {
     }
 
     .intro-clapper {
-        padding: 70px 20px;
+        padding: 60px 20px;
     }
 
     .intro-clapper-inner {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
         gap: 40px;
     }
 
-    .clapper-top {
-        height: 60px;
-        top: -60px;
-        padding: 0 20px;
-    }
-
-    .clapper-bottom {
-        padding: 36px 28px;
+    /* Image comes first on tablet */
+    .intro-image {
+        order: -1;
+        margin-top: 0;
+        min-height: auto;
     }
 
     .intro-image-img {
-        max-width: 520px;
+        max-width: 100%;
+        max-height: 70vh;
+    }
+
+    .clapper-top {
+        height: 55px;
+        top: -45px;
+        padding: 0 20px;
+    }
+
+    .clapper-title {
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+    }
+
+    .clapper-bottom {
+        padding: 42px 32px 36px;
+    }
+
+    .clapper-text {
+        font-size: 16px;
     }
 
     .band-transition {
@@ -2540,17 +2670,354 @@ body::before {
     }
 }
 
-@media (max-width: 600px) {
-    .logo {
-        font-size: 1.5rem;
+/* ==============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================== */
+
+/* --- HEADER (Mobile) --- */
+@media (max-width: 768px) {
+    .header {
+        background-color: #F7F5E9;
+        padding: 18px 24px;
+        border-bottom: 2px solid var(--color-black);
+    }
+
+    .header-content {
+        align-items: center;
+    }
+
+    .logo-image {
+        height: 50px;
+        max-width: 200px;
+    }
+
+    .menu-toggle span {
+        background-color: var(--color-black);
+        width: 32px;
+        height: 3px;
+    }
+
+    .menu-toggle {
+        gap: 6px;
+    }
+}
+
+/* --- HERO SECTION (Mobile) --- */
+@media (max-width: 768px) {
+    .hero {
+        margin-top: 90px; /* Account for larger mobile header */
     }
 
     .hero-image-container {
-        height: 50vh;
-        min-height: 300px;
-        padding: 20px;
+        height: calc(100vh - 90px);
+        min-height: calc(100vh - 90px);
+        width: 100%;
     }
 
+    /* Hero images - contained on mobile */
+    .hero-image-base,
+    .jester-image {
+        width: auto;
+        height: 78%;
+        max-width: 92%;
+        object-fit: contain;
+        object-position: center center;
+    }
+
+    .jester-image-wrapper {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Reveal rectangle - smaller on mobile */
+    .reveal-rectangle {
+        width: 200px;
+        height: 200px;
+        top: 40%;
+    }
+
+    /* Grid extension lines - thinner on mobile */
+    .grid-extension {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .grid-extension.top,
+    .grid-extension.bottom {
+        height: 1px;
+    }
+
+    .grid-extension.left,
+    .grid-extension.right {
+        width: 1px;
+    }
+
+    /* Corner circles - slightly smaller */
+    .corner-circle {
+        width: 8px;
+        height: 8px;
+    }
+
+    /* Hero text positioning - bottom left on mobile */
+    .hero-text-block {
+        left: 20px;
+        top: auto;
+        bottom: 270px;
+        transform: none;
+        max-width: calc(100% - 40px);
+    }
+
+    /* Title - responsive sizing, breaks to 2 lines */
+    .hero-title {
+        font-size: 40px;
+        line-height: 1.05;
+        letter-spacing: -0.5px;
+    }
+
+    /* Subtitles */
+    .hero-subtitle {
+        font-size: 16px;
+        margin-top: 5px;
+        letter-spacing: 0.5px;
+    }
+
+    /* CTA Button - positioned right on mobile */
+    .hero-content .cta-button {
+        position: absolute;
+        bottom: 130px;
+        left: auto;
+        right: 20px;
+        transform: none;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        letter-spacing: 1.5px;
+        white-space: nowrap;
+    }
+}
+
+/* --- SMALLER MOBILE (< 480px) --- */
+@media (max-width: 480px) {
+    .header {
+        padding: 16px 18px;
+    }
+
+    .logo-image {
+        height: 46px;
+        max-width: 170px;
+    }
+
+    /* Slightly smaller hero image on small phones */
+    .hero-image-base,
+    .jester-image {
+        height: 72%;
+        max-width: 90%;
+    }
+
+    .hero {
+        margin-top: 82px;
+    }
+
+    .hero-image-container {
+        height: calc(100vh - 82px);
+        min-height: calc(100vh - 82px);
+    }
+
+    .reveal-rectangle {
+        width: 160px;
+        height: 160px;
+        top: 38%;
+    }
+
+    .corner-circle {
+        width: 6px;
+        height: 6px;
+    }
+
+    .hero-text-block {
+        left: 16px;
+        bottom: 250px;
+        max-width: calc(100% - 32px);
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-subtitle {
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    .hero-content .cta-button {
+        bottom: 120px;
+        right: 16px;
+        padding: 10px 18px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ============================================
+   INTRO CLAPPERBOARD SECTION (Mobile)
+   ============================================ */
+@media (max-width: 768px) {
+    .intro-clapper {
+        padding: 20px 20px 60px;
+        min-height: auto;
+    }
+
+    .intro-clapper-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 100%;
+    }
+
+    /* Image comes first on mobile */
+    .intro-image {
+        order: -1;
+        margin-top: -67px;
+        min-height: auto;
+        width: 100%;
+    }
+
+    .intro-image-img {
+        width: calc(100% - 10px);
+        max-width: calc(100% - 10px);
+        max-height: 60vh;
+        object-fit: contain;
+        object-position: center top;
+        margin: 0 auto;
+        display: block;
+    }
+
+    /* Clapperboard container */
+    .intro-clapperboard {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Clapper top - keep stripes, just resize */
+    .clapper-top {
+        height: 50px;
+        top: -40px;
+        padding: 0 16px;
+        box-shadow: 4px 4px 0 var(--color-black);
+    }
+
+    .clapper-title {
+        font-size: 26px;
+        letter-spacing: 1px;
+    }
+
+    /* Clapper bottom - text content */
+    .clapper-bottom {
+        padding: 40px 24px 32px;
+        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .clapper-text {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .clapper-text p + p {
+        margin-top: 16px;
+    }
+
+    /* Band / Ribbons Section */
+    .band {
+        width: 140vw;
+        padding: 12px 30px;
+        font-size: 35px;
+    }
+
+    /* Position ribbons closer together on mobile */
+    .band-1 {
+        top: 12%;
+    }
+
+    .band-2 {
+        top: 26%;
+    }
+
+    .band-3 {
+        top: 42%;
+    }
+
+    .band-4 {
+        top: 58%;
+    }
+
+    .band-5 {
+        top: 74%;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-clapper {
+        padding: 16px 16px 50px;
+    }
+
+    .intro-image {
+        margin-top: -62px;
+    }
+
+    .intro-image-img {
+        max-height: 55vh;
+    }
+
+    .clapper-top {
+        height: 44px;
+        top: -36px;
+        padding: 0 12px;
+    }
+
+    .clapper-title {
+        font-size: 22px;
+    }
+
+    .clapper-bottom {
+        padding: 34px 18px 28px;
+    }
+
+    .clapper-text {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .clapper-text p + p {
+        margin-top: 14px;
+    }
+
+    /* Band / Ribbons Section */
+    .band {
+        width: 150vw;
+        padding: 10px 20px;
+        font-size: 28px;
+    }
+
+    .band-1 {
+        top: 10%;
+    }
+
+    .band-2 {
+        top: 24%;
+    }
+
+    .band-3 {
+        top: 40%;
+    }
+
+    .band-4 {
+        top: 56%;
+    }
+
+    .band-5 {
+        top: 72%;
+    }
+}
+
+/* --- LEGACY/GENERAL MOBILE STYLES --- */
+@media (max-width: 600px) {
     .section-title {
         font-size: 1.8rem;
     }

@@ -50,8 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const end = viewportHeight * 0.2
         const progress = clamp((start - rect.top) / (start - end), 0, 1)
 
-        const textProgress = clamp((progress - 0.1) / 0.9, 0, 1)
-        const highlightProgress = clamp((progress - 0.45) / 0.55, 0, 1)
+        // Text animation starts later (at 55% progress) so user can catch it
+        const textProgress = clamp((progress - 0.55) / 0.45, 0, 1)
+        const highlightProgress = clamp((progress - 0.75) / 0.25, 0, 1)
+        // Image animation stays the same
         const imageScale = 0.7 + progress * 0.6
         const imageOpacity = clamp((progress - 0.1) / 0.9, 0, 1)
 
